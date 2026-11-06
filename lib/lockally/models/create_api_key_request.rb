@@ -24,6 +24,9 @@ module Lockally
     # Issue a test key (`lk_test_` prefix). A test key accepts sends, records them and fires a simulated delivery webhook without sending mail, and counts against no limit or allowance. 
     attr_accessor :test
 
+    # Optional. When the key stops authenticating. Omit it for a key that does not expire. Must be in the future: an expiry already past would mint a key that fails its first request. 
+    attr_accessor :expires_at
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -51,7 +54,8 @@ module Lockally
       {
         :'label' => :'label',
         :'scopes' => :'scopes',
-        :'test' => :'test'
+        :'test' => :'test',
+        :'expires_at' => :'expires_at'
       }
     end
 
@@ -70,7 +74,8 @@ module Lockally
       {
         :'label' => :'String',
         :'scopes' => :'Array<String>',
-        :'test' => :'Boolean'
+        :'test' => :'Boolean',
+        :'expires_at' => :'Time'
       }
     end
 
@@ -114,6 +119,10 @@ module Lockally
         self.test = attributes[:'test']
       else
         self.test = false
+      end
+
+      if attributes.key?(:'expires_at')
+        self.expires_at = attributes[:'expires_at']
       end
     end
 
@@ -164,7 +173,8 @@ module Lockally
       self.class == o.class &&
           label == o.label &&
           scopes == o.scopes &&
-          test == o.test
+          test == o.test &&
+          expires_at == o.expires_at
     end
 
     # @see the `==` method
@@ -176,7 +186,7 @@ module Lockally
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [label, scopes, test].hash
+      [label, scopes, test, expires_at].hash
     end
 
     # Builds the object from hash

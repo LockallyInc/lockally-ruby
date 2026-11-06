@@ -39,6 +39,12 @@ module Lockally
 
     attr_accessor :size_bytes
 
+    # The sender's own key/value from the send request. Always present; `{}` when none was set.
+    attr_accessor :metadata
+
+    # Grouping labels, lowercased and deduplicated. Always present; `[]` when none were set.
+    attr_accessor :tags
+
     attr_accessor :from
 
     attr_accessor :to
@@ -89,6 +95,8 @@ module Lockally
         :'updated_at' => :'updated_at',
         :'bounce_reason' => :'bounce_reason',
         :'size_bytes' => :'size_bytes',
+        :'metadata' => :'metadata',
+        :'tags' => :'tags',
         :'from' => :'from',
         :'to' => :'to',
         :'cc' => :'cc',
@@ -123,6 +131,8 @@ module Lockally
         :'updated_at' => :'Time',
         :'bounce_reason' => :'String',
         :'size_bytes' => :'Integer',
+        :'metadata' => :'Hash<String, String>',
+        :'tags' => :'Array<String>',
         :'from' => :'String',
         :'to' => :'Array<String>',
         :'cc' => :'Array<String>',
@@ -222,6 +232,18 @@ module Lockally
 
       if attributes.key?(:'size_bytes')
         self.size_bytes = attributes[:'size_bytes']
+      end
+
+      if attributes.key?(:'metadata')
+        if (value = attributes[:'metadata']).is_a?(Hash)
+          self.metadata = value
+        end
+      end
+
+      if attributes.key?(:'tags')
+        if (value = attributes[:'tags']).is_a?(Array)
+          self.tags = value
+        end
       end
 
       if attributes.key?(:'from')
@@ -414,6 +436,8 @@ module Lockally
           updated_at == o.updated_at &&
           bounce_reason == o.bounce_reason &&
           size_bytes == o.size_bytes &&
+          metadata == o.metadata &&
+          tags == o.tags &&
           from == o.from &&
           to == o.to &&
           cc == o.cc &&
@@ -432,7 +456,7 @@ module Lockally
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, tenant_id, message_id, sender, recipients, subject, status, queued_at, updated_at, bounce_reason, size_bytes, from, to, cc, bcc, text, html, headers].hash
+      [id, tenant_id, message_id, sender, recipients, subject, status, queued_at, updated_at, bounce_reason, size_bytes, metadata, tags, from, to, cc, bcc, text, html, headers].hash
     end
 
     # Builds the object from hash

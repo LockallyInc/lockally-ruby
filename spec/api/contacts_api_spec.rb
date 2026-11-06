@@ -32,6 +32,19 @@ describe 'ContactsApi' do
     end
   end
 
+  # unit tests for bulk_upsert_external_contacts
+  # Create or update up to 500 contacts by their ids in another system
+  # For a sync. Each row stands alone: a bad row is reported in &#x60;results&#x60; with its index and the rest are stored, so the response is 200 whenever the request itself is well formed. Read &#x60;failed&#x60; and &#x60;results&#x60;. Two rows with the same &#x60;external_id&#x60; in one request are refused (the later one), because which is current cannot be known. Rerunning the same payload updates rather than duplicates.
+  # @param system 
+  # @param bulk_upsert_external_contacts_request 
+  # @param [Hash] opts the optional parameters
+  # @return [BulkUpsertExternalContacts200Response]
+  describe 'bulk_upsert_external_contacts test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
   # unit tests for create_contact
   # Create a contact
   # @param create_contact_request 
@@ -49,6 +62,18 @@ describe 'ContactsApi' do
   # @param [Hash] opts the optional parameters
   # @return [nil]
   describe 'delete_contact test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
+  # unit tests for delete_external_contact
+  # Delete a contact by its id in another system
+  # @param system Your label for the system the record comes from, for example &#x60;salesforce&#x60;, &#x60;hubspot&#x60; or &#x60;odoo&#x60;. 1 to 64 characters: lowercase letters, digits, dot, underscore or hyphen (upper case is folded).
+  # @param external_id The record&#39;s id in that system, kept exactly as given (case matters). 1 to 255 characters, no spaces. URL-encode it.
+  # @param [Hash] opts the optional parameters
+  # @return [nil]
+  describe 'delete_external_contact test' do
     it 'should work' do
       # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
     end
@@ -76,6 +101,18 @@ describe 'ContactsApi' do
     end
   end
 
+  # unit tests for get_external_contact
+  # Get a contact by its id in another system
+  # @param system Your label for the system the record comes from, for example &#x60;salesforce&#x60;, &#x60;hubspot&#x60; or &#x60;odoo&#x60;. 1 to 64 characters: lowercase letters, digits, dot, underscore or hyphen (upper case is folded).
+  # @param external_id The record&#39;s id in that system, kept exactly as given (case matters). 1 to 255 characters, no spaces. URL-encode it.
+  # @param [Hash] opts the optional parameters
+  # @return [Contact]
+  describe 'get_external_contact test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
   # unit tests for list_contacts
   # List contacts
   # @param [Hash] opts the optional parameters
@@ -98,6 +135,20 @@ describe 'ContactsApi' do
   # @param [Hash] opts the optional parameters
   # @return [Contact]
   describe 'update_contact test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
+  # unit tests for upsert_external_contact
+  # Create or update a contact by its id in another system
+  # Idempotent: the path is the identity, so sending the same request twice cannot create a second contact, and you never need to store our id. Returns 201 when the contact was created and 200 when it already existed. The body is the full representation: a field you leave out is cleared. Email is an ordinary attribute, not a key, so changing it updates the same contact. &#x60;mailboxes:write&#x60; is also accepted.
+  # @param system Your label for the system the record comes from, for example &#x60;salesforce&#x60;, &#x60;hubspot&#x60; or &#x60;odoo&#x60;. 1 to 64 characters: lowercase letters, digits, dot, underscore or hyphen (upper case is folded).
+  # @param external_id The record&#39;s id in that system, kept exactly as given (case matters). 1 to 255 characters, no spaces. URL-encode it.
+  # @param external_contact_input 
+  # @param [Hash] opts the optional parameters
+  # @return [Contact]
+  describe 'upsert_external_contact test' do
     it 'should work' do
       # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
     end

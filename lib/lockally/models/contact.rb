@@ -43,6 +43,12 @@ module Lockally
 
     attr_accessor :updated_at
 
+    # The system that owns this contact's external id. Absent on contacts made by hand.
+    attr_accessor :external_system
+
+    # The contact's id in `external_system`. Absent on contacts made by hand.
+    attr_accessor :external_id
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -81,7 +87,9 @@ module Lockally
         :'role' => :'role',
         :'status' => :'status',
         :'created_at' => :'created_at',
-        :'updated_at' => :'updated_at'
+        :'updated_at' => :'updated_at',
+        :'external_system' => :'external_system',
+        :'external_id' => :'external_id'
       }
     end
 
@@ -111,7 +119,9 @@ module Lockally
         :'role' => :'String',
         :'status' => :'String',
         :'created_at' => :'Time',
-        :'updated_at' => :'Time'
+        :'updated_at' => :'Time',
+        :'external_system' => :'String',
+        :'external_id' => :'String'
       }
     end
 
@@ -207,6 +217,14 @@ module Lockally
         self.updated_at = attributes[:'updated_at']
       else
         self.updated_at = nil
+      end
+
+      if attributes.key?(:'external_system')
+        self.external_system = attributes[:'external_system']
+      end
+
+      if attributes.key?(:'external_id')
+        self.external_id = attributes[:'external_id']
       end
     end
 
@@ -365,7 +383,9 @@ module Lockally
           role == o.role &&
           status == o.status &&
           created_at == o.created_at &&
-          updated_at == o.updated_at
+          updated_at == o.updated_at &&
+          external_system == o.external_system &&
+          external_id == o.external_id
     end
 
     # @see the `==` method
@@ -377,7 +397,7 @@ module Lockally
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, tenant_id, name, email, phone, company, notes, contact_type, source, department, role, status, created_at, updated_at].hash
+      [id, tenant_id, name, email, phone, company, notes, contact_type, source, department, role, status, created_at, updated_at, external_system, external_id].hash
     end
 
     # Builds the object from hash

@@ -7,6 +7,7 @@
 | **id** | **String** |  | [optional] |
 | **mailbox_id** | **String** |  | [optional] |
 | **created_at** | **Time** |  | [optional] |
+| **replaced_old** | **Boolean** |  | [optional] |
 
 ## Example
 
@@ -16,7 +17,8 @@ require 'lockally'
 instance = Lockally::CreateEncryptionKey201Response.new(
   id: null,
   mailbox_id: null,
-  created_at: null
+  created_at: null,
+  replaced_old: null
 )
 ```
 

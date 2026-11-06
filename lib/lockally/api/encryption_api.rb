@@ -82,6 +82,7 @@ module Lockally
     end
 
     # Upload an encryption key pair
+    # Only the mailbox's own webmail session may call this; an API key is refused with 403. The private key is sealed under that mailbox's password, which an administrator never has. `mailbox_email`, if sent, must be the caller's own mailbox. A mailbox that already has a key is starting over: the old key is kept inactive, not destroyed, and the new one starts without a recovery code.
     # @param create_encryption_key_request [CreateEncryptionKeyRequest] 
     # @param [Hash] opts the optional parameters
     # @return [CreateEncryptionKey201Response]
@@ -91,6 +92,7 @@ module Lockally
     end
 
     # Upload an encryption key pair
+    # Only the mailbox&#39;s own webmail session may call this; an API key is refused with 403. The private key is sealed under that mailbox&#39;s password, which an administrator never has. &#x60;mailbox_email&#x60;, if sent, must be the caller&#39;s own mailbox. A mailbox that already has a key is starting over: the old key is kept inactive, not destroyed, and the new one starts without a recovery code.
     # @param create_encryption_key_request [CreateEncryptionKeyRequest] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(CreateEncryptionKey201Response, Integer, Hash)>] CreateEncryptionKey201Response data, response status code and response headers
@@ -148,6 +150,7 @@ module Lockally
     end
 
     # Store an encryption recovery blob
+    # Only the mailbox's own webmail session may call this; an API key is refused with 403. The private key is sealed under that mailbox's password, which an administrator never has. `mailbox_email`, if sent, must be the caller's own mailbox. The blob is the private key sealed under a recovery code the browser generated; the code itself is never sent. Replaces any earlier one.
     # @param create_encryption_recovery_request [CreateEncryptionRecoveryRequest] 
     # @param [Hash] opts the optional parameters
     # @return [nil]
@@ -157,6 +160,7 @@ module Lockally
     end
 
     # Store an encryption recovery blob
+    # Only the mailbox&#39;s own webmail session may call this; an API key is refused with 403. The private key is sealed under that mailbox&#39;s password, which an administrator never has. &#x60;mailbox_email&#x60;, if sent, must be the caller&#39;s own mailbox. The blob is the private key sealed under a recovery code the browser generated; the code itself is never sent. Replaces any earlier one.
     # @param create_encryption_recovery_request [CreateEncryptionRecoveryRequest] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(nil, Integer, Hash)>] nil, response status code and response headers
@@ -214,6 +218,7 @@ module Lockally
     end
 
     # Get encryption key for a mailbox
+    # Anyone in the workspace gets the public key. The mailbox's own webmail session also gets its sealed private key, its sealed recovery copy and the recovery state.
     # @param email [String] 
     # @param [Hash] opts the optional parameters
     # @return [GetEncryptionKey200Response]
@@ -223,6 +228,7 @@ module Lockally
     end
 
     # Get encryption key for a mailbox
+    # Anyone in the workspace gets the public key. The mailbox&#39;s own webmail session also gets its sealed private key, its sealed recovery copy and the recovery state.
     # @param email [String] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(GetEncryptionKey200Response, Integer, Hash)>] GetEncryptionKey200Response data, response status code and response headers
@@ -274,7 +280,65 @@ module Lockally
       return data, status_code, headers
     end
 
-    # Rotate an encryption key
+    # End-to-end encryption status for the workspace
+    # For administrators: whether the add-on is on, and for each mailbox whether it has a key and a recovery code. Carries no key material.
+    # @param [Hash] opts the optional parameters
+    # @return [GetEncryptionStatus200Response]
+    def get_encryption_status(opts = {})
+      data, _status_code, _headers = get_encryption_status_with_http_info(opts)
+      data
+    end
+
+    # End-to-end encryption status for the workspace
+    # For administrators: whether the add-on is on, and for each mailbox whether it has a key and a recovery code. Carries no key material.
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(GetEncryptionStatus200Response, Integer, Hash)>] GetEncryptionStatus200Response data, response status code and response headers
+    def get_encryption_status_with_http_info(opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: EncryptionApi.get_encryption_status ...'
+      end
+      # resource path
+      local_var_path = '/v1/encryption/status'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json', 'application/problem+json']) unless header_params['Accept']
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'GetEncryptionStatus200Response'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"EncryptionApi.get_encryption_status",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: EncryptionApi#get_encryption_status\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Re-seal an encryption key under a new password
+    # Only the mailbox's own webmail session may call this; an API key is refused with 403. The private key is sealed under that mailbox's password, which an administrator never has. `mailbox_email`, if sent, must be the caller's own mailbox. The key pair does not change, so every message stays readable.
     # @param rotate_encryption_key_request [RotateEncryptionKeyRequest] 
     # @param [Hash] opts the optional parameters
     # @return [nil]
@@ -283,7 +347,8 @@ module Lockally
       nil
     end
 
-    # Rotate an encryption key
+    # Re-seal an encryption key under a new password
+    # Only the mailbox&#39;s own webmail session may call this; an API key is refused with 403. The private key is sealed under that mailbox&#39;s password, which an administrator never has. &#x60;mailbox_email&#x60;, if sent, must be the caller&#39;s own mailbox. The key pair does not change, so every message stays readable.
     # @param rotate_encryption_key_request [RotateEncryptionKeyRequest] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(nil, Integer, Hash)>] nil, response status code and response headers

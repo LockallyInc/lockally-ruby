@@ -35,6 +35,10 @@ docs/BatchLookupPublicKeys200ResponseDataInner.md
 docs/BatchResult.md
 docs/BillingApi.md
 docs/BillingStatus.md
+docs/BulkUpsertExternalContacts200Response.md
+docs/BulkUpsertExternalContacts200ResponseResultsInner.md
+docs/BulkUpsertExternalContactsRequest.md
+docs/BulkUpsertExternalContactsRequestContactsInner.md
 docs/Calendar.md
 docs/CalendarEvent.md
 docs/CalendarIntegration.md
@@ -93,6 +97,7 @@ docs/DraftResult.md
 docs/DraftsApi.md
 docs/EncryptionApi.md
 docs/ExportMailbox201Response.md
+docs/ExternalContactInput.md
 docs/GALSettings.md
 docs/GetAddOnStatus200Response.md
 docs/GetAuditSummary200Response.md
@@ -115,6 +120,8 @@ docs/GetDomainsStatus200Response.md
 docs/GetDomainsStatus200ResponseDomainsInner.md
 docs/GetDomainsStatus200ResponseDomainsInnerChecksInner.md
 docs/GetEncryptionKey200Response.md
+docs/GetEncryptionStatus200Response.md
+docs/GetEncryptionStatus200ResponseMailboxesInner.md
 docs/GetIPAssignment200Response.md
 docs/GetIntegrationsSummary200Response.md
 docs/GetIntegrationsSummary200ResponseApiKeysInner.md
@@ -175,6 +182,8 @@ docs/MessageStatsRates.md
 docs/MessageStatsWindow.md
 docs/Migration.md
 docs/MigrationCredential.md
+docs/MigrationDNSCheck.md
+docs/MigrationDomainDNS.md
 docs/MigrationEvent.md
 docs/MigrationMailbox.md
 docs/MigrationProgress.md
@@ -191,6 +200,7 @@ docs/Resource.md
 docs/ResourcesApi.md
 docs/ReturnPath.md
 docs/ReturnPathCheck.md
+docs/RotateApiKeyRequest.md
 docs/RotateEncryptionKeyRequest.md
 docs/SendApi.md
 docs/SendEmail200Response.md
@@ -214,6 +224,8 @@ docs/TemplateInput.md
 docs/TemplatesApi.md
 docs/Tenant.md
 docs/TenantApi.md
+docs/TenantHealthCheck.md
+docs/TenantHealthReport.md
 docs/TestApi.md
 docs/Thread.md
 docs/ThreadClassification.md
@@ -222,8 +234,10 @@ docs/ThreadMessage.md
 docs/ThreadMessageBody.md
 docs/ThreadMessageBodyBody.md
 docs/ThreadSummary.md
+docs/TrackingPolicy.md
 docs/UnitBundle.md
 docs/UpdateAdminRequest.md
+docs/UpdateApiKeyRequest.md
 docs/UpdateCalendarEventRequest.md
 docs/UpdateCalendarIntegrationRequest.md
 docs/UpdateCalendarMemberRequest.md
@@ -237,6 +251,7 @@ docs/UpdateMailboxRequest.md
 docs/UpdateMigrationMailboxRequest.md
 docs/UpdateMigrationRequest.md
 docs/UpdateResourceRequest.md
+docs/UpdateTrackingPolicyRequest.md
 docs/UpdateUserRequest.md
 docs/UpdateWebhookRequest.md
 docs/User.md
@@ -305,6 +320,10 @@ lib/lockally/models/batch_lookup_public_keys200_response.rb
 lib/lockally/models/batch_lookup_public_keys200_response_data_inner.rb
 lib/lockally/models/batch_result.rb
 lib/lockally/models/billing_status.rb
+lib/lockally/models/bulk_upsert_external_contacts200_response.rb
+lib/lockally/models/bulk_upsert_external_contacts200_response_results_inner.rb
+lib/lockally/models/bulk_upsert_external_contacts_request.rb
+lib/lockally/models/bulk_upsert_external_contacts_request_contacts_inner.rb
 lib/lockally/models/calendar.rb
 lib/lockally/models/calendar_event.rb
 lib/lockally/models/calendar_integration.rb
@@ -354,6 +373,7 @@ lib/lockally/models/draft.rb
 lib/lockally/models/draft_list.rb
 lib/lockally/models/draft_result.rb
 lib/lockally/models/export_mailbox201_response.rb
+lib/lockally/models/external_contact_input.rb
 lib/lockally/models/gal_settings.rb
 lib/lockally/models/get_add_on_status200_response.rb
 lib/lockally/models/get_audit_summary200_response.rb
@@ -376,6 +396,8 @@ lib/lockally/models/get_domains_status200_response.rb
 lib/lockally/models/get_domains_status200_response_domains_inner.rb
 lib/lockally/models/get_domains_status200_response_domains_inner_checks_inner.rb
 lib/lockally/models/get_encryption_key200_response.rb
+lib/lockally/models/get_encryption_status200_response.rb
+lib/lockally/models/get_encryption_status200_response_mailboxes_inner.rb
 lib/lockally/models/get_integrations_summary200_response.rb
 lib/lockally/models/get_integrations_summary200_response_api_keys_inner.rb
 lib/lockally/models/get_integrations_summary200_response_webhooks_inner.rb
@@ -433,6 +455,8 @@ lib/lockally/models/message_stats_rates.rb
 lib/lockally/models/message_stats_window.rb
 lib/lockally/models/migration.rb
 lib/lockally/models/migration_credential.rb
+lib/lockally/models/migration_dns_check.rb
+lib/lockally/models/migration_domain_dns.rb
 lib/lockally/models/migration_event.rb
 lib/lockally/models/migration_mailbox.rb
 lib/lockally/models/migration_progress.rb
@@ -447,6 +471,7 @@ lib/lockally/models/replace_distribution_list_members_request.rb
 lib/lockally/models/resource.rb
 lib/lockally/models/return_path.rb
 lib/lockally/models/return_path_check.rb
+lib/lockally/models/rotate_api_key_request.rb
 lib/lockally/models/rotate_encryption_key_request.rb
 lib/lockally/models/send_email200_response.rb
 lib/lockally/models/send_email202_response.rb
@@ -465,6 +490,8 @@ lib/lockally/models/suppression.rb
 lib/lockally/models/template.rb
 lib/lockally/models/template_input.rb
 lib/lockally/models/tenant.rb
+lib/lockally/models/tenant_health_check.rb
+lib/lockally/models/tenant_health_report.rb
 lib/lockally/models/thread.rb
 lib/lockally/models/thread_classification.rb
 lib/lockally/models/thread_list.rb
@@ -472,8 +499,10 @@ lib/lockally/models/thread_message.rb
 lib/lockally/models/thread_message_body.rb
 lib/lockally/models/thread_message_body_body.rb
 lib/lockally/models/thread_summary.rb
+lib/lockally/models/tracking_policy.rb
 lib/lockally/models/unit_bundle.rb
 lib/lockally/models/update_admin_request.rb
+lib/lockally/models/update_api_key_request.rb
 lib/lockally/models/update_calendar_event_request.rb
 lib/lockally/models/update_calendar_integration_request.rb
 lib/lockally/models/update_calendar_member_request.rb
@@ -487,6 +516,7 @@ lib/lockally/models/update_mailbox_request.rb
 lib/lockally/models/update_migration_mailbox_request.rb
 lib/lockally/models/update_migration_request.rb
 lib/lockally/models/update_resource_request.rb
+lib/lockally/models/update_tracking_policy_request.rb
 lib/lockally/models/update_user_request.rb
 lib/lockally/models/update_webhook_request.rb
 lib/lockally/models/user.rb
@@ -549,6 +579,10 @@ spec/models/batch_lookup_public_keys200_response_data_inner_spec.rb
 spec/models/batch_lookup_public_keys200_response_spec.rb
 spec/models/batch_result_spec.rb
 spec/models/billing_status_spec.rb
+spec/models/bulk_upsert_external_contacts200_response_results_inner_spec.rb
+spec/models/bulk_upsert_external_contacts200_response_spec.rb
+spec/models/bulk_upsert_external_contacts_request_contacts_inner_spec.rb
+spec/models/bulk_upsert_external_contacts_request_spec.rb
 spec/models/calendar_event_spec.rb
 spec/models/calendar_integration_spec.rb
 spec/models/calendar_member_spec.rb
@@ -598,6 +632,7 @@ spec/models/draft_list_spec.rb
 spec/models/draft_result_spec.rb
 spec/models/draft_spec.rb
 spec/models/export_mailbox201_response_spec.rb
+spec/models/external_contact_input_spec.rb
 spec/models/gal_settings_spec.rb
 spec/models/get_add_on_status200_response_spec.rb
 spec/models/get_audit_summary200_response_spec.rb
@@ -620,6 +655,8 @@ spec/models/get_domains_status200_response_domains_inner_checks_inner_spec.rb
 spec/models/get_domains_status200_response_domains_inner_spec.rb
 spec/models/get_domains_status200_response_spec.rb
 spec/models/get_encryption_key200_response_spec.rb
+spec/models/get_encryption_status200_response_mailboxes_inner_spec.rb
+spec/models/get_encryption_status200_response_spec.rb
 spec/models/get_integrations_summary200_response_api_keys_inner_spec.rb
 spec/models/get_integrations_summary200_response_spec.rb
 spec/models/get_integrations_summary200_response_webhooks_inner_spec.rb
@@ -676,6 +713,8 @@ spec/models/message_stats_rates_spec.rb
 spec/models/message_stats_spec.rb
 spec/models/message_stats_window_spec.rb
 spec/models/migration_credential_spec.rb
+spec/models/migration_dns_check_spec.rb
+spec/models/migration_domain_dns_spec.rb
 spec/models/migration_event_spec.rb
 spec/models/migration_mailbox_spec.rb
 spec/models/migration_progress_mailboxes_inner_spec.rb
@@ -691,6 +730,7 @@ spec/models/replace_distribution_list_members_request_spec.rb
 spec/models/resource_spec.rb
 spec/models/return_path_check_spec.rb
 spec/models/return_path_spec.rb
+spec/models/rotate_api_key_request_spec.rb
 spec/models/rotate_encryption_key_request_spec.rb
 spec/models/send_email200_response_spec.rb
 spec/models/send_email202_response_spec.rb
@@ -708,6 +748,8 @@ spec/models/start_migration202_response_spec.rb
 spec/models/suppression_spec.rb
 spec/models/template_input_spec.rb
 spec/models/template_spec.rb
+spec/models/tenant_health_check_spec.rb
+spec/models/tenant_health_report_spec.rb
 spec/models/tenant_spec.rb
 spec/models/thread_classification_spec.rb
 spec/models/thread_list_spec.rb
@@ -716,8 +758,10 @@ spec/models/thread_message_body_spec.rb
 spec/models/thread_message_spec.rb
 spec/models/thread_spec.rb
 spec/models/thread_summary_spec.rb
+spec/models/tracking_policy_spec.rb
 spec/models/unit_bundle_spec.rb
 spec/models/update_admin_request_spec.rb
+spec/models/update_api_key_request_spec.rb
 spec/models/update_calendar_event_request_spec.rb
 spec/models/update_calendar_integration_request_spec.rb
 spec/models/update_calendar_member_request_spec.rb
@@ -731,6 +775,7 @@ spec/models/update_mailbox_request_spec.rb
 spec/models/update_migration_mailbox_request_spec.rb
 spec/models/update_migration_request_spec.rb
 spec/models/update_resource_request_spec.rb
+spec/models/update_tracking_policy_request_spec.rb
 spec/models/update_user_request_spec.rb
 spec/models/update_webhook_request_spec.rb
 spec/models/user_event_spec.rb

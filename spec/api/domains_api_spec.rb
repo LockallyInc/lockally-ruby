@@ -107,6 +107,8 @@ describe 'DomainsApi' do
   # List domains
   # Returns every domain registered under the calling tenant.
   # @param [Hash] opts the optional parameters
+  # @option opts [String] :sort Field to order by. This list holds tens of rows per account, so every column is offered and none needs an index.
+  # @option opts [String] :order Defaults to desc for the default field and asc for any other. Always tie-broken on id, so the order is total.
   # @return [ListDomains200Response]
   describe 'list_domains test' do
     it 'should work' do

@@ -335,7 +335,7 @@ This endpoint does not need any parameter.
 
 ## get_tenant_health
 
-> Object get_tenant_health
+> <TenantHealthReport> get_tenant_health
 
 Full tenant health report
 
@@ -365,7 +365,7 @@ end
 
 This returns an Array which contains the response data, status code and headers.
 
-> <Array(Object, Integer, Hash)> get_tenant_health_with_http_info
+> <Array(<TenantHealthReport>, Integer, Hash)> get_tenant_health_with_http_info
 
 ```ruby
 begin
@@ -373,7 +373,7 @@ begin
   data, status_code, headers = api_instance.get_tenant_health_with_http_info
   p status_code # => 2xx
   p headers # => { ... }
-  p data # => Object
+  p data # => <TenantHealthReport>
 rescue Lockally::ApiError => e
   puts "Error when calling DashboardApi->get_tenant_health_with_http_info: #{e}"
 end
@@ -385,7 +385,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**Object**
+[**TenantHealthReport**](TenantHealthReport.md)
 
 ### Authorization
 

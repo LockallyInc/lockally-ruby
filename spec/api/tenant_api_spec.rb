@@ -43,12 +43,35 @@ describe 'TenantApi' do
     end
   end
 
+  # unit tests for get_tracking_policy
+  # Get the engagement tracking policy
+  # Whether open and click tracking are enabled for this account. **Both are off until switched on**, and an account that has never set a policy reads as off rather than as an error.  &#x60;configured&#x60; reports whether this deployment holds a signing secret. Without one no tracking token can be minted or verified, so tracking cannot work however the flags are set, and a caller seeing &#x60;track_opens: true&#x60; with nothing arriving deserves to know why. 
+  # @param [Hash] opts the optional parameters
+  # @return [TrackingPolicy]
+  describe 'get_tracking_policy test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
   # unit tests for get_usage
   # Usage snapshot
   # Returns the tenant&#39;s current usage + cap consumption. Designed for poll-based alerting on the integrator side (e.g. \&quot;warn when daily quota is 80% used\&quot;). Computed live on request, so there is no cache, so callers should poll at most once per minute. 
   # @param [Hash] opts the optional parameters
   # @return [GetUsage200Response]
   describe 'get_usage test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
+  # unit tests for update_tracking_policy
+  # Update the engagement tracking policy
+  # Enables or disables tracking for the account. Send either flag or both; an omitted flag is left unchanged rather than reset.  **Enabling this changes what Lockally collects about your recipients**, who have no relationship with us. You are the controller for them. What is collected is a user-agent string, a timestamp, and for a click the destination URL: **no IP address**, ever. The change is written to your audit log. 
+  # @param update_tracking_policy_request 
+  # @param [Hash] opts the optional parameters
+  # @return [TrackingPolicy]
+  describe 'update_tracking_policy test' do
     it 'should work' do
       # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
     end

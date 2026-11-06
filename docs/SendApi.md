@@ -170,7 +170,8 @@ api_instance = Lockally::SendApi.new
 opts = {
   from: Time.parse('2013-10-20T19:20:30+01:00'), # Time | Window start (default 7 days ago).
   to: Time.parse('2013-10-20T19:20:30+01:00'), # Time | Window end (default now).
-  domain: 'domain_example' # String | Filter by sender domain.
+  domain: 'domain_example', # String | Filter by sender domain.
+  tag: 'tag_example' # String | Group the window by the sender's own tags: one tag, or a comma-separated set meaning ANY. Case-insensitive. This is the dimension that tells a transactional stream from a notification one.
 }
 
 begin
@@ -207,6 +208,7 @@ end
 | **from** | **Time** | Window start (default 7 days ago). | [optional] |
 | **to** | **Time** | Window end (default now). | [optional] |
 | **domain** | **String** | Filter by sender domain. | [optional] |
+| **tag** | **String** | Group the window by the sender&#39;s own tags: one tag, or a comma-separated set meaning ANY. Case-insensitive. This is the dimension that tells a transactional stream from a notification one. | [optional] |
 
 ### Return type
 
@@ -245,10 +247,13 @@ api_instance = Lockally::SendApi.new
 opts = {
   status: 'queued', # String | 
   sender: 'sender_example', # String | Exact match against the `from` mailbox.
+  tag: 'tag_example', # String | Filter to messages carrying any of these tags. One tag, or a comma-separated set meaning ANY. Case-insensitive: the value is normalised the same way tags are on write.
   q: 'q_example', # String | Free-text search across subject + sender.
   since: Time.parse('2013-10-20T19:20:30+01:00'), # Time | Only messages queued at or after this RFC 3339 instant.
   cursor: 'cursor_example', # String | queued_at of the prior page boundary. Pass back the `next_cursor` returned by the previous call.
-  limit: 56 # Integer | 
+  limit: 56, # Integer | 
+  sort: 'queued_at', # String | Field to order by. Only indexed columns are offered: an unindexed sort on this table is a full scan of the account's send history. status and sender are filters instead.
+  order: 'asc' # String | Defaults to desc for the default field and asc for any other. The order is always made total by a tie-break on id, so paging cannot repeat or skip a row that shares a timestamp. cursor encodes queued_at, so combining it with another sort is a 400 rather than a wrong page.
 }
 
 begin
@@ -284,10 +289,13 @@ end
 | ---- | ---- | ----------- | ----- |
 | **status** | **String** |  | [optional] |
 | **sender** | **String** | Exact match against the &#x60;from&#x60; mailbox. | [optional] |
+| **tag** | **String** | Filter to messages carrying any of these tags. One tag, or a comma-separated set meaning ANY. Case-insensitive: the value is normalised the same way tags are on write. | [optional] |
 | **q** | **String** | Free-text search across subject + sender. | [optional] |
 | **since** | **Time** | Only messages queued at or after this RFC 3339 instant. | [optional] |
 | **cursor** | **String** | queued_at of the prior page boundary. Pass back the &#x60;next_cursor&#x60; returned by the previous call. | [optional] |
 | **limit** | **Integer** |  | [optional][default to 50] |
+| **sort** | **String** | Field to order by. Only indexed columns are offered: an unindexed sort on this table is a full scan of the account&#39;s send history. status and sender are filters instead. | [optional][default to &#39;queued_at&#39;] |
+| **order** | **String** | Defaults to desc for the default field and asc for any other. The order is always made total by a tie-break on id, so paging cannot repeat or skip a row that shares a timestamp. cursor encodes queued_at, so combining it with another sort is a 400 rather than a wrong page. | [optional] |
 
 ### Return type
 

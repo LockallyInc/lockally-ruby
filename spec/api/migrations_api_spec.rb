@@ -47,7 +47,7 @@ describe 'MigrationsApi' do
   # Check DNS readiness for cutover
   # @param id 
   # @param [Hash] opts the optional parameters
-  # @return [Object]
+  # @return [MigrationDNSCheck]
   describe 'check_migration_dns test' do
     it 'should work' do
       # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/

@@ -32,6 +32,15 @@ module Lockally
 
     attr_accessor :created_at
 
+    # True for an lk_test_* key: the whole request path runs but a send never reaches the mail server and nothing counts against the account.
+    attr_accessor :test
+
+    # When the key stops authenticating. Null means it does not expire, which is how every key behaved before expiry existed. Enforced at authentication, so the key fails the first request after this moment rather than whenever a sweep runs. 
+    attr_accessor :expires_at
+
+    # The successor issued by `POST /v1/api-keys/{id}/rotate`. Set on the PREDECESSOR, so you can see which key replaced this one while both still work through the overlap window. 
+    attr_accessor :rotated_to
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -42,7 +51,10 @@ module Lockally
         :'label' => :'label',
         :'last_used_at' => :'last_used_at',
         :'revoked_at' => :'revoked_at',
-        :'created_at' => :'created_at'
+        :'created_at' => :'created_at',
+        :'test' => :'test',
+        :'expires_at' => :'expires_at',
+        :'rotated_to' => :'rotated_to'
       }
     end
 
@@ -66,7 +78,10 @@ module Lockally
         :'label' => :'String',
         :'last_used_at' => :'Time',
         :'revoked_at' => :'Time',
-        :'created_at' => :'Time'
+        :'created_at' => :'Time',
+        :'test' => :'Boolean',
+        :'expires_at' => :'Time',
+        :'rotated_to' => :'String'
       }
     end
 
@@ -136,6 +151,18 @@ module Lockally
         self.created_at = attributes[:'created_at']
       else
         self.created_at = nil
+      end
+
+      if attributes.key?(:'test')
+        self.test = attributes[:'test']
+      end
+
+      if attributes.key?(:'expires_at')
+        self.expires_at = attributes[:'expires_at']
+      end
+
+      if attributes.key?(:'rotated_to')
+        self.rotated_to = attributes[:'rotated_to']
       end
     end
 
@@ -256,7 +283,10 @@ module Lockally
           label == o.label &&
           last_used_at == o.last_used_at &&
           revoked_at == o.revoked_at &&
-          created_at == o.created_at
+          created_at == o.created_at &&
+          test == o.test &&
+          expires_at == o.expires_at &&
+          rotated_to == o.rotated_to
     end
 
     # @see the `==` method
@@ -268,7 +298,7 @@ module Lockally
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, tenant_id, prefix, scopes, label, last_used_at, revoked_at, created_at].hash
+      [id, tenant_id, prefix, scopes, label, last_used_at, revoked_at, created_at, test, expires_at, rotated_to].hash
     end
 
     # Builds the object from hash

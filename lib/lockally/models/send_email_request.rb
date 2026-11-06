@@ -51,6 +51,18 @@ module Lockally
     # Schedule delivery for a future RFC3339 time (≤ 30 days out). Omit or past = send now. Cancel with DELETE /v1/messages/{id} while scheduled.
     attr_accessor :send_at
 
+    # Arbitrary key/value you attach to this message and get back on every delivery webhook for it, so a send can be matched to your own records without a lookup table.  **It never leaves Lockally.** A custom entry in `headers` goes out on the wire to the recipient, which is why that is not a substitute: order ids and internal identifiers do not belong in a header the recipient can read.  At most 20 keys, keys at most 64 characters, values at most 512. **Over a limit is refused with a `400`, never truncated**: a silently shortened order id succeeds and then fails to match weeks later.  Not indexed and not filterable. 
+    attr_accessor :metadata
+
+    # Labels that group this send for filtering and analytics: campaign, template, environment.  **Lowercased, trimmed and deduplicated on write**, so the grouping does not depend on every caller spelling them identically. `Campaign-X` is stored as `campaign-x`, and either spelling matches it in a filter.  At most 10 per message after deduplication, each at most 32 characters. Over either is a `400` rather than a trimmed list: a send missing the tag it was tagged for is worse than a refusal.  Unlike `metadata`, tags ARE queryable: filter with `GET /v1/messages?tag=` and group with `GET /v1/messages/stats?tag=`. 
+    attr_accessor :tags
+
+    # Override the account's open-tracking setting for this one send. Omit to inherit it.  Three states matter here: `true`, `false`, and absent. A transactional receipt can set `false` without the account turning tracking off for its marketing. 
+    attr_accessor :track_opens
+
+    # As `track_opens`, for click tracking. Click tracking rewrites `http(s)` links in the **HTML** part only: the plain-text part is never rewritten, because a visible redirect URL is what recipients complain about. A text-only send is therefore not click-tracked. 
+    attr_accessor :track_clicks
+
     attr_accessor :attachments
 
     # Attribute mapping from ruby-style variable name to JSON key.
@@ -70,6 +82,10 @@ module Lockally
         :'template_id' => :'template_id',
         :'variables' => :'variables',
         :'send_at' => :'send_at',
+        :'metadata' => :'metadata',
+        :'tags' => :'tags',
+        :'track_opens' => :'track_opens',
+        :'track_clicks' => :'track_clicks',
         :'attachments' => :'attachments'
       }
     end
@@ -101,6 +117,10 @@ module Lockally
         :'template_id' => :'String',
         :'variables' => :'Hash<String, String>',
         :'send_at' => :'Time',
+        :'metadata' => :'Hash<String, String>',
+        :'tags' => :'Array<String>',
+        :'track_opens' => :'Boolean',
+        :'track_clicks' => :'Boolean',
         :'attachments' => :'Array<SendEmailRequestAttachmentsInner>'
       }
     end
@@ -197,6 +217,26 @@ module Lockally
         self.send_at = attributes[:'send_at']
       end
 
+      if attributes.key?(:'metadata')
+        if (value = attributes[:'metadata']).is_a?(Hash)
+          self.metadata = value
+        end
+      end
+
+      if attributes.key?(:'tags')
+        if (value = attributes[:'tags']).is_a?(Array)
+          self.tags = value
+        end
+      end
+
+      if attributes.key?(:'track_opens')
+        self.track_opens = attributes[:'track_opens']
+      end
+
+      if attributes.key?(:'track_clicks')
+        self.track_clicks = attributes[:'track_clicks']
+      end
+
       if attributes.key?(:'attachments')
         if (value = attributes[:'attachments']).is_a?(Array)
           self.attachments = value
@@ -221,6 +261,14 @@ module Lockally
         invalid_properties.push('invalid value for "to", number of items must be greater than or equal to 1.')
       end
 
+      if !@metadata.nil? && @metadata.length > 20
+        invalid_properties.push('invalid value for "metadata", number of items must be less than or equal to 20.')
+      end
+
+      if !@tags.nil? && @tags.length > 10
+        invalid_properties.push('invalid value for "tags", number of items must be less than or equal to 10.')
+      end
+
       invalid_properties
     end
 
@@ -231,6 +279,8 @@ module Lockally
       return false if @from.nil?
       return false if @to.nil?
       return false if @to.length < 1
+      return false if !@metadata.nil? && @metadata.length > 20
+      return false if !@tags.nil? && @tags.length > 10
       true
     end
 
@@ -258,6 +308,34 @@ module Lockally
       @to = to
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] metadata Value to be assigned
+    def metadata=(metadata)
+      if metadata.nil?
+        fail ArgumentError, 'metadata cannot be nil'
+      end
+
+      if metadata.length > 20
+        fail ArgumentError, 'invalid value for "metadata", number of items must be less than or equal to 20.'
+      end
+
+      @metadata = metadata
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] tags Value to be assigned
+    def tags=(tags)
+      if tags.nil?
+        fail ArgumentError, 'tags cannot be nil'
+      end
+
+      if tags.length > 10
+        fail ArgumentError, 'invalid value for "tags", number of items must be less than or equal to 10.'
+      end
+
+      @tags = tags
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
@@ -277,6 +355,10 @@ module Lockally
           template_id == o.template_id &&
           variables == o.variables &&
           send_at == o.send_at &&
+          metadata == o.metadata &&
+          tags == o.tags &&
+          track_opens == o.track_opens &&
+          track_clicks == o.track_clicks &&
           attachments == o.attachments
     end
 
@@ -289,7 +371,7 @@ module Lockally
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [from, to, cc, bcc, subject, text, html, headers, reply_to, reply_to_name, unsubscribe, template_id, variables, send_at, attachments].hash
+      [from, to, cc, bcc, subject, text, html, headers, reply_to, reply_to_name, unsubscribe, template_id, variables, send_at, metadata, tags, track_opens, track_clicks, attachments].hash
     end
 
     # Builds the object from hash

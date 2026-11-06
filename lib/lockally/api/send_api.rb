@@ -149,6 +149,7 @@ module Lockally
     # @option opts [Time] :from Window start (default 7 days ago).
     # @option opts [Time] :to Window end (default now).
     # @option opts [String] :domain Filter by sender domain.
+    # @option opts [String] :tag Group the window by the sender&#39;s own tags: one tag, or a comma-separated set meaning ANY. Case-insensitive. This is the dimension that tells a transactional stream from a notification one.
     # @return [MessageStats]
     def get_message_stats(opts = {})
       data, _status_code, _headers = get_message_stats_with_http_info(opts)
@@ -161,6 +162,7 @@ module Lockally
     # @option opts [Time] :from Window start (default 7 days ago).
     # @option opts [Time] :to Window end (default now).
     # @option opts [String] :domain Filter by sender domain.
+    # @option opts [String] :tag Group the window by the sender&#39;s own tags: one tag, or a comma-separated set meaning ANY. Case-insensitive. This is the dimension that tells a transactional stream from a notification one.
     # @return [Array<(MessageStats, Integer, Hash)>] MessageStats data, response status code and response headers
     def get_message_stats_with_http_info(opts = {})
       if @api_client.config.debugging
@@ -174,6 +176,7 @@ module Lockally
       query_params[:'from'] = opts[:'from'] if !opts[:'from'].nil?
       query_params[:'to'] = opts[:'to'] if !opts[:'to'].nil?
       query_params[:'domain'] = opts[:'domain'] if !opts[:'domain'].nil?
+      query_params[:'tag'] = opts[:'tag'] if !opts[:'tag'].nil?
 
       # header parameters
       header_params = opts[:header_params] || {}
@@ -214,10 +217,13 @@ module Lockally
     # @param [Hash] opts the optional parameters
     # @option opts [String] :status 
     # @option opts [String] :sender Exact match against the &#x60;from&#x60; mailbox.
+    # @option opts [String] :tag Filter to messages carrying any of these tags. One tag, or a comma-separated set meaning ANY. Case-insensitive: the value is normalised the same way tags are on write.
     # @option opts [String] :q Free-text search across subject + sender.
     # @option opts [Time] :since Only messages queued at or after this RFC 3339 instant.
     # @option opts [String] :cursor queued_at of the prior page boundary. Pass back the &#x60;next_cursor&#x60; returned by the previous call.
     # @option opts [Integer] :limit  (default to 50)
+    # @option opts [String] :sort Field to order by. Only indexed columns are offered: an unindexed sort on this table is a full scan of the account&#39;s send history. status and sender are filters instead. (default to 'queued_at')
+    # @option opts [String] :order Defaults to desc for the default field and asc for any other. The order is always made total by a tie-break on id, so paging cannot repeat or skip a row that shares a timestamp. cursor encodes queued_at, so combining it with another sort is a 400 rather than a wrong page.
     # @return [ListMessages200Response]
     def list_messages(opts = {})
       data, _status_code, _headers = list_messages_with_http_info(opts)
@@ -229,10 +235,13 @@ module Lockally
     # @param [Hash] opts the optional parameters
     # @option opts [String] :status 
     # @option opts [String] :sender Exact match against the &#x60;from&#x60; mailbox.
+    # @option opts [String] :tag Filter to messages carrying any of these tags. One tag, or a comma-separated set meaning ANY. Case-insensitive: the value is normalised the same way tags are on write.
     # @option opts [String] :q Free-text search across subject + sender.
     # @option opts [Time] :since Only messages queued at or after this RFC 3339 instant.
     # @option opts [String] :cursor queued_at of the prior page boundary. Pass back the &#x60;next_cursor&#x60; returned by the previous call.
     # @option opts [Integer] :limit  (default to 50)
+    # @option opts [String] :sort Field to order by. Only indexed columns are offered: an unindexed sort on this table is a full scan of the account&#39;s send history. status and sender are filters instead. (default to 'queued_at')
+    # @option opts [String] :order Defaults to desc for the default field and asc for any other. The order is always made total by a tie-break on id, so paging cannot repeat or skip a row that shares a timestamp. cursor encodes queued_at, so combining it with another sort is a 400 rather than a wrong page.
     # @return [Array<(ListMessages200Response, Integer, Hash)>] ListMessages200Response data, response status code and response headers
     def list_messages_with_http_info(opts = {})
       if @api_client.config.debugging
@@ -246,6 +255,14 @@ module Lockally
         fail ArgumentError, 'invalid value for "opts[:"limit"]" when calling SendApi.list_messages, must be smaller than or equal to 200.'
       end
 
+      allowable_values = ["queued_at", "updated_at"]
+      if @api_client.config.client_side_validation && opts[:'sort'] && !allowable_values.include?(opts[:'sort'])
+        fail ArgumentError, "invalid value for \"sort\", must be one of #{allowable_values}"
+      end
+      allowable_values = ["asc", "desc"]
+      if @api_client.config.client_side_validation && opts[:'order'] && !allowable_values.include?(opts[:'order'])
+        fail ArgumentError, "invalid value for \"order\", must be one of #{allowable_values}"
+      end
       # resource path
       local_var_path = '/v1/messages'
 
@@ -253,10 +270,13 @@ module Lockally
       query_params = opts[:query_params] || {}
       query_params[:'status'] = opts[:'status'] if !opts[:'status'].nil?
       query_params[:'sender'] = opts[:'sender'] if !opts[:'sender'].nil?
+      query_params[:'tag'] = opts[:'tag'] if !opts[:'tag'].nil?
       query_params[:'q'] = opts[:'q'] if !opts[:'q'].nil?
       query_params[:'since'] = opts[:'since'] if !opts[:'since'].nil?
       query_params[:'cursor'] = opts[:'cursor'] if !opts[:'cursor'].nil?
       query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
+      query_params[:'sort'] = opts[:'sort'] if !opts[:'sort'].nil?
+      query_params[:'order'] = opts[:'order'] if !opts[:'order'].nil?
 
       # header parameters
       header_params = opts[:header_params] || {}

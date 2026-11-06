@@ -48,6 +48,8 @@ describe 'ApiKeysApi' do
   # List API keys
   # Returns all API keys (active and revoked) belonging to the calling tenant. The &#x60;secret&#x60; is **never** returned, only prefix + metadata. 
   # @param [Hash] opts the optional parameters
+  # @option opts [String] :sort Field to order by. This list holds tens of rows per account, so every column is offered and none needs an index.
+  # @option opts [String] :order Defaults to desc for the default field and asc for any other. Always tie-broken on id, so the order is total.
   # @return [ListApiKeys200Response]
   describe 'list_api_keys test' do
     it 'should work' do
@@ -62,6 +64,32 @@ describe 'ApiKeysApi' do
   # @param [Hash] opts the optional parameters
   # @return [nil]
   describe 'revoke_api_key test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
+  # unit tests for rotate_api_key
+  # Rotate an API key
+  # Issues a successor key and puts a short expiry on this one, so **both work until the overlap ends**. That window is the point: without it, rotation is revocation with extra steps and every caller has to swap credentials in the same instant.  The successor inherits this key&#39;s scopes, its label (the label names the integration, and the integration has not changed) and its test flag. Its full &#x60;secret&#x60; is in this response and nowhere else.  The response&#39;s &#x60;expires_at&#x60; is the **predecessor&#39;s** deadline, so you can see from the rotation itself how long you have to cut over.  A key that has already been rotated cannot be rotated again: chaining overlaps would leave several live keys for one integration, which is the opposite of the intent. Rotate the successor instead. 
+  # @param id 
+  # @param [Hash] opts the optional parameters
+  # @option opts [RotateApiKeyRequest] :rotate_api_key_request 
+  # @return [CreateApiKey201Response]
+  describe 'rotate_api_key test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
+  # unit tests for update_api_key
+  # Update an API key
+  # Changes a key&#39;s label, scopes or expiry in place, without reissuing the secret.  **Every field is optional and absent means unchanged.** Renaming a key does not clear its expiry. For &#x60;expires_at&#x60; there are three distinct requests: omit the field to leave the expiry alone, send a timestamp to set one, and send an explicit &#x60;null&#x60; to remove one.  Scopes are replaced wholesale, not merged. This endpoint does not restrict which scopes you may grant, because &#x60;POST /v1/api-keys&#x60; never has either: a key with &#x60;tenant:admin&#x60; can already mint a key with any scope, so &#x60;tenant:admin&#x60; is root-equivalent for key management.  A revoked key cannot be updated. 
+  # @param id 
+  # @param update_api_key_request 
+  # @param [Hash] opts the optional parameters
+  # @return [APIKey]
+  describe 'update_api_key test' do
     it 'should work' do
       # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
     end

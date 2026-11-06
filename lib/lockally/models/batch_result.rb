@@ -27,6 +27,9 @@ module Lockally
     # Present when this message failed; the others are then absent.
     attr_accessor :error
 
+    # Advisory, and NOT a failure. Today the only one is a template variable the template referenced and the request never supplied, which rendered as the empty string.
+    attr_accessor :warning
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -56,7 +59,8 @@ module Lockally
         :'id' => :'id',
         :'message_id' => :'message_id',
         :'status' => :'status',
-        :'error' => :'error'
+        :'error' => :'error',
+        :'warning' => :'warning'
       }
     end
 
@@ -77,7 +81,8 @@ module Lockally
         :'id' => :'String',
         :'message_id' => :'String',
         :'status' => :'String',
-        :'error' => :'String'
+        :'error' => :'String',
+        :'warning' => :'String'
       }
     end
 
@@ -122,6 +127,10 @@ module Lockally
       if attributes.key?(:'error')
         self.error = attributes[:'error']
       end
+
+      if attributes.key?(:'warning')
+        self.warning = attributes[:'warning']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -160,7 +169,8 @@ module Lockally
           id == o.id &&
           message_id == o.message_id &&
           status == o.status &&
-          error == o.error
+          error == o.error &&
+          warning == o.warning
     end
 
     # @see the `==` method
@@ -172,7 +182,7 @@ module Lockally
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [index, id, message_id, status, error].hash
+      [index, id, message_id, status, error, warning].hash
     end
 
     # Builds the object from hash

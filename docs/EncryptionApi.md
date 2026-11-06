@@ -8,7 +8,8 @@ All URIs are relative to *https://api.lockally.com*
 | [**create_encryption_key**](EncryptionApi.md#create_encryption_key) | **POST** /v1/encryption/keys | Upload an encryption key pair |
 | [**create_encryption_recovery**](EncryptionApi.md#create_encryption_recovery) | **POST** /v1/encryption/recovery | Store an encryption recovery blob |
 | [**get_encryption_key**](EncryptionApi.md#get_encryption_key) | **GET** /v1/encryption/keys/{email} | Get encryption key for a mailbox |
-| [**rotate_encryption_key**](EncryptionApi.md#rotate_encryption_key) | **POST** /v1/encryption/keys/rotate | Rotate an encryption key |
+| [**get_encryption_status**](EncryptionApi.md#get_encryption_status) | **GET** /v1/encryption/status | End-to-end encryption status for the workspace |
+| [**rotate_encryption_key**](EncryptionApi.md#rotate_encryption_key) | **POST** /v1/encryption/keys/rotate | Re-seal an encryption key under a new password |
 
 
 ## batch_lookup_public_keys
@@ -84,6 +85,8 @@ end
 
 Upload an encryption key pair
 
+Only the mailbox's own webmail session may call this; an API key is refused with 403. The private key is sealed under that mailbox's password, which an administrator never has. `mailbox_email`, if sent, must be the caller's own mailbox. A mailbox that already has a key is starting over: the old key is kept inactive, not destroyed, and the new one starts without a recovery code.
+
 ### Examples
 
 ```ruby
@@ -96,7 +99,7 @@ Lockally.configure do |config|
 end
 
 api_instance = Lockally::EncryptionApi.new
-create_encryption_key_request = Lockally::CreateEncryptionKeyRequest.new({mailbox_email: 'mailbox_email_example', public_key: 'public_key_example', encrypted_private_key: 'encrypted_private_key_example'}) # CreateEncryptionKeyRequest | 
+create_encryption_key_request = Lockally::CreateEncryptionKeyRequest.new({public_key: 'public_key_example', encrypted_private_key: 'encrypted_private_key_example'}) # CreateEncryptionKeyRequest | 
 
 begin
   # Upload an encryption key pair
@@ -151,6 +154,8 @@ end
 
 Store an encryption recovery blob
 
+Only the mailbox's own webmail session may call this; an API key is refused with 403. The private key is sealed under that mailbox's password, which an administrator never has. `mailbox_email`, if sent, must be the caller's own mailbox. The blob is the private key sealed under a recovery code the browser generated; the code itself is never sent. Replaces any earlier one.
+
 ### Examples
 
 ```ruby
@@ -163,7 +168,7 @@ Lockally.configure do |config|
 end
 
 api_instance = Lockally::EncryptionApi.new
-create_encryption_recovery_request = Lockally::CreateEncryptionRecoveryRequest.new({mailbox_email: 'mailbox_email_example', recovery_blob: 'recovery_blob_example'}) # CreateEncryptionRecoveryRequest | 
+create_encryption_recovery_request = Lockally::CreateEncryptionRecoveryRequest.new({recovery_blob: 'recovery_blob_example'}) # CreateEncryptionRecoveryRequest | 
 
 begin
   # Store an encryption recovery blob
@@ -216,6 +221,8 @@ nil (empty response body)
 > <GetEncryptionKey200Response> get_encryption_key(email)
 
 Get encryption key for a mailbox
+
+Anyone in the workspace gets the public key. The mailbox's own webmail session also gets its sealed private key, its sealed recovery copy and the recovery state.
 
 ### Examples
 
@@ -278,11 +285,13 @@ end
 - **Accept**: application/json, application/problem+json
 
 
-## rotate_encryption_key
+## get_encryption_status
 
-> rotate_encryption_key(rotate_encryption_key_request)
+> <GetEncryptionStatus200Response> get_encryption_status
 
-Rotate an encryption key
+End-to-end encryption status for the workspace
+
+For administrators: whether the add-on is on, and for each mailbox whether it has a key and a recovery code. Carries no key material.
 
 ### Examples
 
@@ -296,10 +305,76 @@ Lockally.configure do |config|
 end
 
 api_instance = Lockally::EncryptionApi.new
-rotate_encryption_key_request = Lockally::RotateEncryptionKeyRequest.new({mailbox_email: 'mailbox_email_example', encrypted_private_key: 'encrypted_private_key_example'}) # RotateEncryptionKeyRequest | 
 
 begin
-  # Rotate an encryption key
+  # End-to-end encryption status for the workspace
+  result = api_instance.get_encryption_status
+  p result
+rescue Lockally::ApiError => e
+  puts "Error when calling EncryptionApi->get_encryption_status: #{e}"
+end
+```
+
+#### Using the get_encryption_status_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(<GetEncryptionStatus200Response>, Integer, Hash)> get_encryption_status_with_http_info
+
+```ruby
+begin
+  # End-to-end encryption status for the workspace
+  data, status_code, headers = api_instance.get_encryption_status_with_http_info
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => <GetEncryptionStatus200Response>
+rescue Lockally::ApiError => e
+  puts "Error when calling EncryptionApi->get_encryption_status_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**GetEncryptionStatus200Response**](GetEncryptionStatus200Response.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+
+## rotate_encryption_key
+
+> rotate_encryption_key(rotate_encryption_key_request)
+
+Re-seal an encryption key under a new password
+
+Only the mailbox's own webmail session may call this; an API key is refused with 403. The private key is sealed under that mailbox's password, which an administrator never has. `mailbox_email`, if sent, must be the caller's own mailbox. The key pair does not change, so every message stays readable.
+
+### Examples
+
+```ruby
+require 'time'
+require 'lockally'
+# setup authorization
+Lockally.configure do |config|
+  # Configure Bearer authorization (lk_live_<prefix>_<secret>): bearerAuth
+  config.access_token = 'YOUR_BEARER_TOKEN'
+end
+
+api_instance = Lockally::EncryptionApi.new
+rotate_encryption_key_request = Lockally::RotateEncryptionKeyRequest.new({encrypted_private_key: 'encrypted_private_key_example'}) # RotateEncryptionKeyRequest | 
+
+begin
+  # Re-seal an encryption key under a new password
   api_instance.rotate_encryption_key(rotate_encryption_key_request)
 rescue Lockally::ApiError => e
   puts "Error when calling EncryptionApi->rotate_encryption_key: #{e}"
@@ -314,7 +389,7 @@ This returns an Array which contains the response data (`nil` in this case), sta
 
 ```ruby
 begin
-  # Rotate an encryption key
+  # Re-seal an encryption key under a new password
   data, status_code, headers = api_instance.rotate_encryption_key_with_http_info(rotate_encryption_key_request)
   p status_code # => 2xx
   p headers # => { ... }

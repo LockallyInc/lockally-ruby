@@ -33,4 +33,10 @@ describe Lockally::SendEmailBatchRequest do
     end
   end
 
+  describe 'test attribute "variables"' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
 end

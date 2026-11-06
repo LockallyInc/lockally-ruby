@@ -76,6 +76,63 @@ module Lockally
       return data, status_code, headers
     end
 
+    # Get the engagement tracking policy
+    # Whether open and click tracking are enabled for this account. **Both are off until switched on**, and an account that has never set a policy reads as off rather than as an error.  `configured` reports whether this deployment holds a signing secret. Without one no tracking token can be minted or verified, so tracking cannot work however the flags are set, and a caller seeing `track_opens: true` with nothing arriving deserves to know why. 
+    # @param [Hash] opts the optional parameters
+    # @return [TrackingPolicy]
+    def get_tracking_policy(opts = {})
+      data, _status_code, _headers = get_tracking_policy_with_http_info(opts)
+      data
+    end
+
+    # Get the engagement tracking policy
+    # Whether open and click tracking are enabled for this account. **Both are off until switched on**, and an account that has never set a policy reads as off rather than as an error.  &#x60;configured&#x60; reports whether this deployment holds a signing secret. Without one no tracking token can be minted or verified, so tracking cannot work however the flags are set, and a caller seeing &#x60;track_opens: true&#x60; with nothing arriving deserves to know why. 
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(TrackingPolicy, Integer, Hash)>] TrackingPolicy data, response status code and response headers
+    def get_tracking_policy_with_http_info(opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: TenantApi.get_tracking_policy ...'
+      end
+      # resource path
+      local_var_path = '/v1/tracking'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json', 'application/problem+json']) unless header_params['Accept']
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'TrackingPolicy'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"TenantApi.get_tracking_policy",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: TenantApi#get_tracking_policy\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Usage snapshot
     # Returns the tenant's current usage + cap consumption. Designed for poll-based alerting on the integrator side (e.g. \"warn when daily quota is 80% used\"). Computed live on request, so there is no cache, so callers should poll at most once per minute. 
     # @param [Hash] opts the optional parameters
@@ -129,6 +186,74 @@ module Lockally
       data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: TenantApi#get_usage\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Update the engagement tracking policy
+    # Enables or disables tracking for the account. Send either flag or both; an omitted flag is left unchanged rather than reset.  **Enabling this changes what Lockally collects about your recipients**, who have no relationship with us. You are the controller for them. What is collected is a user-agent string, a timestamp, and for a click the destination URL: **no IP address**, ever. The change is written to your audit log. 
+    # @param update_tracking_policy_request [UpdateTrackingPolicyRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [TrackingPolicy]
+    def update_tracking_policy(update_tracking_policy_request, opts = {})
+      data, _status_code, _headers = update_tracking_policy_with_http_info(update_tracking_policy_request, opts)
+      data
+    end
+
+    # Update the engagement tracking policy
+    # Enables or disables tracking for the account. Send either flag or both; an omitted flag is left unchanged rather than reset.  **Enabling this changes what Lockally collects about your recipients**, who have no relationship with us. You are the controller for them. What is collected is a user-agent string, a timestamp, and for a click the destination URL: **no IP address**, ever. The change is written to your audit log. 
+    # @param update_tracking_policy_request [UpdateTrackingPolicyRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(TrackingPolicy, Integer, Hash)>] TrackingPolicy data, response status code and response headers
+    def update_tracking_policy_with_http_info(update_tracking_policy_request, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: TenantApi.update_tracking_policy ...'
+      end
+      # verify the required parameter 'update_tracking_policy_request' is set
+      if @api_client.config.client_side_validation && update_tracking_policy_request.nil?
+        fail ArgumentError, "Missing the required parameter 'update_tracking_policy_request' when calling TenantApi.update_tracking_policy"
+      end
+      # resource path
+      local_var_path = '/v1/tracking'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json', 'application/problem+json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(update_tracking_policy_request)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'TrackingPolicy'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"TenantApi.update_tracking_policy",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:PUT, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: TenantApi#update_tracking_policy\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end

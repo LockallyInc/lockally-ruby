@@ -17,10 +17,14 @@ module Lockally
   class SendEmailBatchRequest < ApiModelBase
     attr_accessor :messages
 
+    # Template variables every message in the batch inherits. Each message's own `variables` override these key by key, so shared values are written once and per-recipient ones stay per-recipient.  Without this, a 500-message batch repeats every shared variable 500 times: most of the payload, and 500 places for one of them to differ by a typo. 
+    attr_accessor :variables
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'messages' => :'messages'
+        :'messages' => :'messages',
+        :'variables' => :'variables'
       }
     end
 
@@ -37,7 +41,8 @@ module Lockally
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'messages' => :'Array<SendMessage>'
+        :'messages' => :'Array<SendMessage>',
+        :'variables' => :'Hash<String, String>'
       }
     end
 
@@ -69,6 +74,12 @@ module Lockally
         end
       else
         self.messages = nil
+      end
+
+      if attributes.key?(:'variables')
+        if (value = attributes[:'variables']).is_a?(Hash)
+          self.variables = value
+        end
       end
     end
 
@@ -125,7 +136,8 @@ module Lockally
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          messages == o.messages
+          messages == o.messages &&
+          variables == o.variables
     end
 
     # @see the `==` method
@@ -137,7 +149,7 @@ module Lockally
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [messages].hash
+      [messages, variables].hash
     end
 
     # Builds the object from hash

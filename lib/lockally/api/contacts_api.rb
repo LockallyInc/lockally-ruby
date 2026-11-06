@@ -19,6 +19,85 @@ module Lockally
     def initialize(api_client = ApiClient.default)
       @api_client = api_client
     end
+    # Create or update up to 500 contacts by their ids in another system
+    # For a sync. Each row stands alone: a bad row is reported in `results` with its index and the rest are stored, so the response is 200 whenever the request itself is well formed. Read `failed` and `results`. Two rows with the same `external_id` in one request are refused (the later one), because which is current cannot be known. Rerunning the same payload updates rather than duplicates.
+    # @param system [String] 
+    # @param bulk_upsert_external_contacts_request [BulkUpsertExternalContactsRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [BulkUpsertExternalContacts200Response]
+    def bulk_upsert_external_contacts(system, bulk_upsert_external_contacts_request, opts = {})
+      data, _status_code, _headers = bulk_upsert_external_contacts_with_http_info(system, bulk_upsert_external_contacts_request, opts)
+      data
+    end
+
+    # Create or update up to 500 contacts by their ids in another system
+    # For a sync. Each row stands alone: a bad row is reported in &#x60;results&#x60; with its index and the rest are stored, so the response is 200 whenever the request itself is well formed. Read &#x60;failed&#x60; and &#x60;results&#x60;. Two rows with the same &#x60;external_id&#x60; in one request are refused (the later one), because which is current cannot be known. Rerunning the same payload updates rather than duplicates.
+    # @param system [String] 
+    # @param bulk_upsert_external_contacts_request [BulkUpsertExternalContactsRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(BulkUpsertExternalContacts200Response, Integer, Hash)>] BulkUpsertExternalContacts200Response data, response status code and response headers
+    def bulk_upsert_external_contacts_with_http_info(system, bulk_upsert_external_contacts_request, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: ContactsApi.bulk_upsert_external_contacts ...'
+      end
+      # verify the required parameter 'system' is set
+      if @api_client.config.client_side_validation && system.nil?
+        fail ArgumentError, "Missing the required parameter 'system' when calling ContactsApi.bulk_upsert_external_contacts"
+      end
+      pattern = Regexp.new(/^[a-z0-9][a-z0-9._-]{0,63}$/)
+      if @api_client.config.client_side_validation && system !~ pattern
+        fail ArgumentError, "invalid value for 'system' when calling ContactsApi.bulk_upsert_external_contacts, must conform to the pattern #{pattern}."
+      end
+
+      # verify the required parameter 'bulk_upsert_external_contacts_request' is set
+      if @api_client.config.client_side_validation && bulk_upsert_external_contacts_request.nil?
+        fail ArgumentError, "Missing the required parameter 'bulk_upsert_external_contacts_request' when calling ContactsApi.bulk_upsert_external_contacts"
+      end
+      # resource path
+      local_var_path = '/v1/contacts/external/{system}'.sub('{system}', CGI.escape(system.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json', 'application/problem+json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(bulk_upsert_external_contacts_request)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'BulkUpsertExternalContacts200Response'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"ContactsApi.bulk_upsert_external_contacts",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:PUT, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: ContactsApi#bulk_upsert_external_contacts\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Create a contact
     # @param create_contact_request [CreateContactRequest] 
     # @param [Hash] opts the optional parameters
@@ -146,6 +225,82 @@ module Lockally
       return data, status_code, headers
     end
 
+    # Delete a contact by its id in another system
+    # @param system [String] Your label for the system the record comes from, for example &#x60;salesforce&#x60;, &#x60;hubspot&#x60; or &#x60;odoo&#x60;. 1 to 64 characters: lowercase letters, digits, dot, underscore or hyphen (upper case is folded).
+    # @param external_id [String] The record&#39;s id in that system, kept exactly as given (case matters). 1 to 255 characters, no spaces. URL-encode it.
+    # @param [Hash] opts the optional parameters
+    # @return [nil]
+    def delete_external_contact(system, external_id, opts = {})
+      delete_external_contact_with_http_info(system, external_id, opts)
+      nil
+    end
+
+    # Delete a contact by its id in another system
+    # @param system [String] Your label for the system the record comes from, for example &#x60;salesforce&#x60;, &#x60;hubspot&#x60; or &#x60;odoo&#x60;. 1 to 64 characters: lowercase letters, digits, dot, underscore or hyphen (upper case is folded).
+    # @param external_id [String] The record&#39;s id in that system, kept exactly as given (case matters). 1 to 255 characters, no spaces. URL-encode it.
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(nil, Integer, Hash)>] nil, response status code and response headers
+    def delete_external_contact_with_http_info(system, external_id, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: ContactsApi.delete_external_contact ...'
+      end
+      # verify the required parameter 'system' is set
+      if @api_client.config.client_side_validation && system.nil?
+        fail ArgumentError, "Missing the required parameter 'system' when calling ContactsApi.delete_external_contact"
+      end
+      pattern = Regexp.new(/^[a-z0-9][a-z0-9._-]{0,63}$/)
+      if @api_client.config.client_side_validation && system !~ pattern
+        fail ArgumentError, "invalid value for 'system' when calling ContactsApi.delete_external_contact, must conform to the pattern #{pattern}."
+      end
+
+      # verify the required parameter 'external_id' is set
+      if @api_client.config.client_side_validation && external_id.nil?
+        fail ArgumentError, "Missing the required parameter 'external_id' when calling ContactsApi.delete_external_contact"
+      end
+      if @api_client.config.client_side_validation && external_id.to_s.length > 255
+        fail ArgumentError, 'invalid value for "external_id" when calling ContactsApi.delete_external_contact, the character length must be smaller than or equal to 255.'
+      end
+
+      # resource path
+      local_var_path = '/v1/contacts/external/{system}/{external_id}'.sub('{system}', CGI.escape(system.to_s)).sub('{external_id}', CGI.escape(external_id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/problem+json']) unless header_params['Accept']
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type]
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"ContactsApi.delete_external_contact",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:DELETE, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: ContactsApi#delete_external_contact\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Get a contact
     # @param id [String] 
     # @param [Hash] opts the optional parameters
@@ -264,6 +419,82 @@ module Lockally
       data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: ContactsApi#get_contact_lists\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Get a contact by its id in another system
+    # @param system [String] Your label for the system the record comes from, for example &#x60;salesforce&#x60;, &#x60;hubspot&#x60; or &#x60;odoo&#x60;. 1 to 64 characters: lowercase letters, digits, dot, underscore or hyphen (upper case is folded).
+    # @param external_id [String] The record&#39;s id in that system, kept exactly as given (case matters). 1 to 255 characters, no spaces. URL-encode it.
+    # @param [Hash] opts the optional parameters
+    # @return [Contact]
+    def get_external_contact(system, external_id, opts = {})
+      data, _status_code, _headers = get_external_contact_with_http_info(system, external_id, opts)
+      data
+    end
+
+    # Get a contact by its id in another system
+    # @param system [String] Your label for the system the record comes from, for example &#x60;salesforce&#x60;, &#x60;hubspot&#x60; or &#x60;odoo&#x60;. 1 to 64 characters: lowercase letters, digits, dot, underscore or hyphen (upper case is folded).
+    # @param external_id [String] The record&#39;s id in that system, kept exactly as given (case matters). 1 to 255 characters, no spaces. URL-encode it.
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(Contact, Integer, Hash)>] Contact data, response status code and response headers
+    def get_external_contact_with_http_info(system, external_id, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: ContactsApi.get_external_contact ...'
+      end
+      # verify the required parameter 'system' is set
+      if @api_client.config.client_side_validation && system.nil?
+        fail ArgumentError, "Missing the required parameter 'system' when calling ContactsApi.get_external_contact"
+      end
+      pattern = Regexp.new(/^[a-z0-9][a-z0-9._-]{0,63}$/)
+      if @api_client.config.client_side_validation && system !~ pattern
+        fail ArgumentError, "invalid value for 'system' when calling ContactsApi.get_external_contact, must conform to the pattern #{pattern}."
+      end
+
+      # verify the required parameter 'external_id' is set
+      if @api_client.config.client_side_validation && external_id.nil?
+        fail ArgumentError, "Missing the required parameter 'external_id' when calling ContactsApi.get_external_contact"
+      end
+      if @api_client.config.client_side_validation && external_id.to_s.length > 255
+        fail ArgumentError, 'invalid value for "external_id" when calling ContactsApi.get_external_contact, the character length must be smaller than or equal to 255.'
+      end
+
+      # resource path
+      local_var_path = '/v1/contacts/external/{system}/{external_id}'.sub('{system}', CGI.escape(system.to_s)).sub('{external_id}', CGI.escape(external_id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json', 'application/problem+json']) unless header_params['Accept']
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'Contact'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"ContactsApi.get_external_contact",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: ContactsApi#get_external_contact\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end
@@ -406,6 +637,95 @@ module Lockally
       data, status_code, headers = @api_client.call_api(:PATCH, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: ContactsApi#update_contact\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Create or update a contact by its id in another system
+    # Idempotent: the path is the identity, so sending the same request twice cannot create a second contact, and you never need to store our id. Returns 201 when the contact was created and 200 when it already existed. The body is the full representation: a field you leave out is cleared. Email is an ordinary attribute, not a key, so changing it updates the same contact. `mailboxes:write` is also accepted.
+    # @param system [String] Your label for the system the record comes from, for example &#x60;salesforce&#x60;, &#x60;hubspot&#x60; or &#x60;odoo&#x60;. 1 to 64 characters: lowercase letters, digits, dot, underscore or hyphen (upper case is folded).
+    # @param external_id [String] The record&#39;s id in that system, kept exactly as given (case matters). 1 to 255 characters, no spaces. URL-encode it.
+    # @param external_contact_input [ExternalContactInput] 
+    # @param [Hash] opts the optional parameters
+    # @return [Contact]
+    def upsert_external_contact(system, external_id, external_contact_input, opts = {})
+      data, _status_code, _headers = upsert_external_contact_with_http_info(system, external_id, external_contact_input, opts)
+      data
+    end
+
+    # Create or update a contact by its id in another system
+    # Idempotent: the path is the identity, so sending the same request twice cannot create a second contact, and you never need to store our id. Returns 201 when the contact was created and 200 when it already existed. The body is the full representation: a field you leave out is cleared. Email is an ordinary attribute, not a key, so changing it updates the same contact. &#x60;mailboxes:write&#x60; is also accepted.
+    # @param system [String] Your label for the system the record comes from, for example &#x60;salesforce&#x60;, &#x60;hubspot&#x60; or &#x60;odoo&#x60;. 1 to 64 characters: lowercase letters, digits, dot, underscore or hyphen (upper case is folded).
+    # @param external_id [String] The record&#39;s id in that system, kept exactly as given (case matters). 1 to 255 characters, no spaces. URL-encode it.
+    # @param external_contact_input [ExternalContactInput] 
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(Contact, Integer, Hash)>] Contact data, response status code and response headers
+    def upsert_external_contact_with_http_info(system, external_id, external_contact_input, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: ContactsApi.upsert_external_contact ...'
+      end
+      # verify the required parameter 'system' is set
+      if @api_client.config.client_side_validation && system.nil?
+        fail ArgumentError, "Missing the required parameter 'system' when calling ContactsApi.upsert_external_contact"
+      end
+      pattern = Regexp.new(/^[a-z0-9][a-z0-9._-]{0,63}$/)
+      if @api_client.config.client_side_validation && system !~ pattern
+        fail ArgumentError, "invalid value for 'system' when calling ContactsApi.upsert_external_contact, must conform to the pattern #{pattern}."
+      end
+
+      # verify the required parameter 'external_id' is set
+      if @api_client.config.client_side_validation && external_id.nil?
+        fail ArgumentError, "Missing the required parameter 'external_id' when calling ContactsApi.upsert_external_contact"
+      end
+      if @api_client.config.client_side_validation && external_id.to_s.length > 255
+        fail ArgumentError, 'invalid value for "external_id" when calling ContactsApi.upsert_external_contact, the character length must be smaller than or equal to 255.'
+      end
+
+      # verify the required parameter 'external_contact_input' is set
+      if @api_client.config.client_side_validation && external_contact_input.nil?
+        fail ArgumentError, "Missing the required parameter 'external_contact_input' when calling ContactsApi.upsert_external_contact"
+      end
+      # resource path
+      local_var_path = '/v1/contacts/external/{system}/{external_id}'.sub('{system}', CGI.escape(system.to_s)).sub('{external_id}', CGI.escape(external_id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json', 'application/problem+json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(external_contact_input)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'Contact'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"ContactsApi.upsert_external_contact",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:PUT, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: ContactsApi#upsert_external_contact\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end

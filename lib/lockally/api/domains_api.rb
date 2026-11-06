@@ -403,6 +403,8 @@ module Lockally
     # List domains
     # Returns every domain registered under the calling tenant.
     # @param [Hash] opts the optional parameters
+    # @option opts [String] :sort Field to order by. This list holds tens of rows per account, so every column is offered and none needs an index. (default to 'created_at')
+    # @option opts [String] :order Defaults to desc for the default field and asc for any other. Always tie-broken on id, so the order is total.
     # @return [ListDomains200Response]
     def list_domains(opts = {})
       data, _status_code, _headers = list_domains_with_http_info(opts)
@@ -412,16 +414,28 @@ module Lockally
     # List domains
     # Returns every domain registered under the calling tenant.
     # @param [Hash] opts the optional parameters
+    # @option opts [String] :sort Field to order by. This list holds tens of rows per account, so every column is offered and none needs an index. (default to 'created_at')
+    # @option opts [String] :order Defaults to desc for the default field and asc for any other. Always tie-broken on id, so the order is total.
     # @return [Array<(ListDomains200Response, Integer, Hash)>] ListDomains200Response data, response status code and response headers
     def list_domains_with_http_info(opts = {})
       if @api_client.config.debugging
         @api_client.config.logger.debug 'Calling API: DomainsApi.list_domains ...'
+      end
+      allowable_values = ["domain", "created_at", "verified_at"]
+      if @api_client.config.client_side_validation && opts[:'sort'] && !allowable_values.include?(opts[:'sort'])
+        fail ArgumentError, "invalid value for \"sort\", must be one of #{allowable_values}"
+      end
+      allowable_values = ["asc", "desc"]
+      if @api_client.config.client_side_validation && opts[:'order'] && !allowable_values.include?(opts[:'order'])
+        fail ArgumentError, "invalid value for \"order\", must be one of #{allowable_values}"
       end
       # resource path
       local_var_path = '/v1/domains'
 
       # query parameters
       query_params = opts[:query_params] || {}
+      query_params[:'sort'] = opts[:'sort'] if !opts[:'sort'].nil?
+      query_params[:'order'] = opts[:'order'] if !opts[:'order'].nil?
 
       # header parameters
       header_params = opts[:header_params] || {}

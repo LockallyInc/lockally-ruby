@@ -209,6 +209,8 @@ module Lockally
 
     # List templates
     # @param [Hash] opts the optional parameters
+    # @option opts [String] :sort Field to order by. This list holds tens of rows per account, so every column is offered and none needs an index. (default to 'name')
+    # @option opts [String] :order Defaults to asc for the default field and asc for any other. Always tie-broken on id, so the order is total.
     # @return [ListTemplates200Response]
     def list_templates(opts = {})
       data, _status_code, _headers = list_templates_with_http_info(opts)
@@ -217,16 +219,28 @@ module Lockally
 
     # List templates
     # @param [Hash] opts the optional parameters
+    # @option opts [String] :sort Field to order by. This list holds tens of rows per account, so every column is offered and none needs an index. (default to 'name')
+    # @option opts [String] :order Defaults to asc for the default field and asc for any other. Always tie-broken on id, so the order is total.
     # @return [Array<(ListTemplates200Response, Integer, Hash)>] ListTemplates200Response data, response status code and response headers
     def list_templates_with_http_info(opts = {})
       if @api_client.config.debugging
         @api_client.config.logger.debug 'Calling API: TemplatesApi.list_templates ...'
+      end
+      allowable_values = ["name", "created_at", "updated_at"]
+      if @api_client.config.client_side_validation && opts[:'sort'] && !allowable_values.include?(opts[:'sort'])
+        fail ArgumentError, "invalid value for \"sort\", must be one of #{allowable_values}"
+      end
+      allowable_values = ["asc", "desc"]
+      if @api_client.config.client_side_validation && opts[:'order'] && !allowable_values.include?(opts[:'order'])
+        fail ArgumentError, "invalid value for \"order\", must be one of #{allowable_values}"
       end
       # resource path
       local_var_path = '/v1/templates'
 
       # query parameters
       query_params = opts[:query_params] || {}
+      query_params[:'sort'] = opts[:'sort'] if !opts[:'sort'].nil?
+      query_params[:'order'] = opts[:'order'] if !opts[:'order'].nil?
 
       # header parameters
       header_params = opts[:header_params] || {}

@@ -85,8 +85,8 @@ module Lockally
       return data, status_code, headers
     end
 
-    # Delete a user
-    # Soft-deletes the user by setting status to deprovisioned.
+    # Deprovision a user
+    # Sets the user's status to `deprovisioned` and ends their access: each of their mailboxes and their console membership is disabled, app passwords are revoked, and every webmail and console session ends. Their mail is kept. API keys belong to the workspace and are not revoked; rotate any the person had access to. 
     # @param id [String] 
     # @param [Hash] opts the optional parameters
     # @return [nil]
@@ -95,8 +95,8 @@ module Lockally
       nil
     end
 
-    # Delete a user
-    # Soft-deletes the user by setting status to deprovisioned.
+    # Deprovision a user
+    # Sets the user&#39;s status to &#x60;deprovisioned&#x60; and ends their access: each of their mailboxes and their console membership is disabled, app passwords are revoked, and every webmail and console session ends. Their mail is kept. API keys belong to the workspace and are not revoked; rotate any the person had access to. 
     # @param id [String] 
     # @param [Hash] opts the optional parameters
     # @return [Array<(nil, Integer, Hash)>] nil, response status code and response headers
@@ -276,6 +276,7 @@ module Lockally
     end
 
     # Update a user
+    # Setting `status` to `suspended` or `deprovisioned` takes away everything the person signs in with: each of their mailboxes and their console membership is disabled, app passwords are revoked, and every webmail and console session ends. Setting it back to `active` restores what the suspension disabled, and nothing an admin disabled for another reason. API keys belong to the workspace, not to the person who created them, and are not revoked; rotate any the person had access to. 
     # @param id [String] 
     # @param update_user_request [UpdateUserRequest] 
     # @param [Hash] opts the optional parameters
@@ -286,6 +287,7 @@ module Lockally
     end
 
     # Update a user
+    # Setting &#x60;status&#x60; to &#x60;suspended&#x60; or &#x60;deprovisioned&#x60; takes away everything the person signs in with: each of their mailboxes and their console membership is disabled, app passwords are revoked, and every webmail and console session ends. Setting it back to &#x60;active&#x60; restores what the suspension disabled, and nothing an admin disabled for another reason. API keys belong to the workspace, not to the person who created them, and are not revoked; rotate any the person had access to. 
     # @param id [String] 
     # @param update_user_request [UpdateUserRequest] 
     # @param [Hash] opts the optional parameters

@@ -85,7 +85,7 @@ describe 'DashboardApi' do
   # unit tests for get_tenant_health
   # Full tenant health report
   # @param [Hash] opts the optional parameters
-  # @return [Object]
+  # @return [TenantHealthReport]
   describe 'get_tenant_health test' do
     it 'should work' do
       # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/

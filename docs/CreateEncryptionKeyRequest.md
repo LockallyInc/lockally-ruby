@@ -4,7 +4,7 @@
 
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
-| **mailbox_email** | **String** |  |  |
+| **mailbox_email** | **String** |  | [optional] |
 | **public_key** | **String** |  |  |
 | **encrypted_private_key** | **String** |  |  |
 | **kdf_params** | **Object** |  | [optional] |

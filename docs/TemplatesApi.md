@@ -213,7 +213,7 @@ end
 
 ## list_templates
 
-> <ListTemplates200Response> list_templates
+> <ListTemplates200Response> list_templates(opts)
 
 List templates
 
@@ -229,10 +229,14 @@ Lockally.configure do |config|
 end
 
 api_instance = Lockally::TemplatesApi.new
+opts = {
+  sort: 'name', # String | Field to order by. This list holds tens of rows per account, so every column is offered and none needs an index.
+  order: 'asc' # String | Defaults to asc for the default field and asc for any other. Always tie-broken on id, so the order is total.
+}
 
 begin
   # List templates
-  result = api_instance.list_templates
+  result = api_instance.list_templates(opts)
   p result
 rescue Lockally::ApiError => e
   puts "Error when calling TemplatesApi->list_templates: #{e}"
@@ -243,12 +247,12 @@ end
 
 This returns an Array which contains the response data, status code and headers.
 
-> <Array(<ListTemplates200Response>, Integer, Hash)> list_templates_with_http_info
+> <Array(<ListTemplates200Response>, Integer, Hash)> list_templates_with_http_info(opts)
 
 ```ruby
 begin
   # List templates
-  data, status_code, headers = api_instance.list_templates_with_http_info
+  data, status_code, headers = api_instance.list_templates_with_http_info(opts)
   p status_code # => 2xx
   p headers # => { ... }
   p data # => <ListTemplates200Response>
@@ -259,7 +263,10 @@ end
 
 ### Parameters
 
-This endpoint does not need any parameter.
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **sort** | **String** | Field to order by. This list holds tens of rows per account, so every column is offered and none needs an index. | [optional][default to &#39;name&#39;] |
+| **order** | **String** | Defaults to asc for the default field and asc for any other. Always tie-broken on id, so the order is total. | [optional] |
 
 ### Return type
 

@@ -5,7 +5,7 @@ All URIs are relative to *https://api.lockally.com*
 | Method | HTTP request | Description |
 | ------ | ------------ | ----------- |
 | [**create_user**](UsersApi.md#create_user) | **POST** /v1/users | Create a user |
-| [**delete_user**](UsersApi.md#delete_user) | **DELETE** /v1/users/{id} | Delete a user |
+| [**delete_user**](UsersApi.md#delete_user) | **DELETE** /v1/users/{id} | Deprovision a user |
 | [**get_user**](UsersApi.md#get_user) | **GET** /v1/users/{id} | Get a user |
 | [**list_users**](UsersApi.md#list_users) | **GET** /v1/users | List users |
 | [**update_user**](UsersApi.md#update_user) | **PATCH** /v1/users/{id} | Update a user |
@@ -82,9 +82,9 @@ end
 
 > delete_user(id)
 
-Delete a user
+Deprovision a user
 
-Soft-deletes the user by setting status to deprovisioned.
+Sets the user's status to `deprovisioned` and ends their access: each of their mailboxes and their console membership is disabled, app passwords are revoked, and every webmail and console session ends. Their mail is kept. API keys belong to the workspace and are not revoked; rotate any the person had access to. 
 
 ### Examples
 
@@ -101,7 +101,7 @@ api_instance = Lockally::UsersApi.new
 id = '38400000-8cf0-11bd-b23e-10b96e4ef00d' # String | 
 
 begin
-  # Delete a user
+  # Deprovision a user
   api_instance.delete_user(id)
 rescue Lockally::ApiError => e
   puts "Error when calling UsersApi->delete_user: #{e}"
@@ -116,7 +116,7 @@ This returns an Array which contains the response data (`nil` in this case), sta
 
 ```ruby
 begin
-  # Delete a user
+  # Deprovision a user
   data, status_code, headers = api_instance.delete_user_with_http_info(id)
   p status_code # => 2xx
   p headers # => { ... }
@@ -287,6 +287,8 @@ end
 > <User> update_user(id, update_user_request)
 
 Update a user
+
+Setting `status` to `suspended` or `deprovisioned` takes away everything the person signs in with: each of their mailboxes and their console membership is disabled, app passwords are revoked, and every webmail and console session ends. Setting it back to `active` restores what the suspension disabled, and nothing an admin disabled for another reason. API keys belong to the workspace, not to the person who created them, and are not revoked; rotate any the person had access to. 
 
 ### Examples
 

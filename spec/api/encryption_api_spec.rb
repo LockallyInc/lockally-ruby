@@ -45,6 +45,7 @@ describe 'EncryptionApi' do
 
   # unit tests for create_encryption_key
   # Upload an encryption key pair
+  # Only the mailbox&#39;s own webmail session may call this; an API key is refused with 403. The private key is sealed under that mailbox&#39;s password, which an administrator never has. &#x60;mailbox_email&#x60;, if sent, must be the caller&#39;s own mailbox. A mailbox that already has a key is starting over: the old key is kept inactive, not destroyed, and the new one starts without a recovery code.
   # @param create_encryption_key_request 
   # @param [Hash] opts the optional parameters
   # @return [CreateEncryptionKey201Response]
@@ -56,6 +57,7 @@ describe 'EncryptionApi' do
 
   # unit tests for create_encryption_recovery
   # Store an encryption recovery blob
+  # Only the mailbox&#39;s own webmail session may call this; an API key is refused with 403. The private key is sealed under that mailbox&#39;s password, which an administrator never has. &#x60;mailbox_email&#x60;, if sent, must be the caller&#39;s own mailbox. The blob is the private key sealed under a recovery code the browser generated; the code itself is never sent. Replaces any earlier one.
   # @param create_encryption_recovery_request 
   # @param [Hash] opts the optional parameters
   # @return [nil]
@@ -67,6 +69,7 @@ describe 'EncryptionApi' do
 
   # unit tests for get_encryption_key
   # Get encryption key for a mailbox
+  # Anyone in the workspace gets the public key. The mailbox&#39;s own webmail session also gets its sealed private key, its sealed recovery copy and the recovery state.
   # @param email 
   # @param [Hash] opts the optional parameters
   # @return [GetEncryptionKey200Response]
@@ -76,8 +79,20 @@ describe 'EncryptionApi' do
     end
   end
 
+  # unit tests for get_encryption_status
+  # End-to-end encryption status for the workspace
+  # For administrators: whether the add-on is on, and for each mailbox whether it has a key and a recovery code. Carries no key material.
+  # @param [Hash] opts the optional parameters
+  # @return [GetEncryptionStatus200Response]
+  describe 'get_encryption_status test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
   # unit tests for rotate_encryption_key
-  # Rotate an encryption key
+  # Re-seal an encryption key under a new password
+  # Only the mailbox&#39;s own webmail session may call this; an API key is refused with 403. The private key is sealed under that mailbox&#39;s password, which an administrator never has. &#x60;mailbox_email&#x60;, if sent, must be the caller&#39;s own mailbox. The key pair does not change, so every message stays readable.
   # @param rotate_encryption_key_request 
   # @param [Hash] opts the optional parameters
   # @return [nil]

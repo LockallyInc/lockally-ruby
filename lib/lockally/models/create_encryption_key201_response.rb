@@ -21,12 +21,15 @@ module Lockally
 
     attr_accessor :created_at
 
+    attr_accessor :replaced_old
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'id' => :'id',
         :'mailbox_id' => :'mailbox_id',
-        :'created_at' => :'created_at'
+        :'created_at' => :'created_at',
+        :'replaced_old' => :'replaced_old'
       }
     end
 
@@ -45,7 +48,8 @@ module Lockally
       {
         :'id' => :'String',
         :'mailbox_id' => :'String',
-        :'created_at' => :'Time'
+        :'created_at' => :'Time',
+        :'replaced_old' => :'Boolean'
       }
     end
 
@@ -82,6 +86,10 @@ module Lockally
       if attributes.key?(:'created_at')
         self.created_at = attributes[:'created_at']
       end
+
+      if attributes.key?(:'replaced_old')
+        self.replaced_old = attributes[:'replaced_old']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -106,7 +114,8 @@ module Lockally
       self.class == o.class &&
           id == o.id &&
           mailbox_id == o.mailbox_id &&
-          created_at == o.created_at
+          created_at == o.created_at &&
+          replaced_old == o.replaced_old
     end
 
     # @see the `==` method
@@ -118,7 +127,7 @@ module Lockally
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, mailbox_id, created_at].hash
+      [id, mailbox_id, created_at, replaced_old].hash
     end
 
     # Builds the object from hash

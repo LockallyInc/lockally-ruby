@@ -77,8 +77,6 @@ module Lockally
 
       if attributes.key?(:'mailbox_email')
         self.mailbox_email = attributes[:'mailbox_email']
-      else
-        self.mailbox_email = nil
       end
 
       if attributes.key?(:'public_key')
@@ -103,10 +101,6 @@ module Lockally
     def list_invalid_properties
       warn '[DEPRECATED] the `list_invalid_properties` method is obsolete'
       invalid_properties = Array.new
-      if @mailbox_email.nil?
-        invalid_properties.push('invalid value for "mailbox_email", mailbox_email cannot be nil.')
-      end
-
       if @public_key.nil?
         invalid_properties.push('invalid value for "public_key", public_key cannot be nil.')
       end
@@ -122,20 +116,9 @@ module Lockally
     # @return true if the model is valid
     def valid?
       warn '[DEPRECATED] the `valid?` method is obsolete'
-      return false if @mailbox_email.nil?
       return false if @public_key.nil?
       return false if @encrypted_private_key.nil?
       true
-    end
-
-    # Custom attribute writer method with validation
-    # @param [Object] mailbox_email Value to be assigned
-    def mailbox_email=(mailbox_email)
-      if mailbox_email.nil?
-        fail ArgumentError, 'mailbox_email cannot be nil'
-      end
-
-      @mailbox_email = mailbox_email
     end
 
     # Custom attribute writer method with validation

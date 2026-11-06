@@ -90,6 +90,8 @@ module Lockally
     # List API keys
     # Returns all API keys (active and revoked) belonging to the calling tenant. The `secret` is **never** returned, only prefix + metadata. 
     # @param [Hash] opts the optional parameters
+    # @option opts [String] :sort Field to order by. This list holds tens of rows per account, so every column is offered and none needs an index. (default to 'created_at')
+    # @option opts [String] :order Defaults to desc for the default field and asc for any other. Always tie-broken on id, so the order is total.
     # @return [ListApiKeys200Response]
     def list_api_keys(opts = {})
       data, _status_code, _headers = list_api_keys_with_http_info(opts)
@@ -99,16 +101,28 @@ module Lockally
     # List API keys
     # Returns all API keys (active and revoked) belonging to the calling tenant. The &#x60;secret&#x60; is **never** returned, only prefix + metadata. 
     # @param [Hash] opts the optional parameters
+    # @option opts [String] :sort Field to order by. This list holds tens of rows per account, so every column is offered and none needs an index. (default to 'created_at')
+    # @option opts [String] :order Defaults to desc for the default field and asc for any other. Always tie-broken on id, so the order is total.
     # @return [Array<(ListApiKeys200Response, Integer, Hash)>] ListApiKeys200Response data, response status code and response headers
     def list_api_keys_with_http_info(opts = {})
       if @api_client.config.debugging
         @api_client.config.logger.debug 'Calling API: ApiKeysApi.list_api_keys ...'
+      end
+      allowable_values = ["label", "created_at", "last_used_at", "expires_at"]
+      if @api_client.config.client_side_validation && opts[:'sort'] && !allowable_values.include?(opts[:'sort'])
+        fail ArgumentError, "invalid value for \"sort\", must be one of #{allowable_values}"
+      end
+      allowable_values = ["asc", "desc"]
+      if @api_client.config.client_side_validation && opts[:'order'] && !allowable_values.include?(opts[:'order'])
+        fail ArgumentError, "invalid value for \"order\", must be one of #{allowable_values}"
       end
       # resource path
       local_var_path = '/v1/api-keys'
 
       # query parameters
       query_params = opts[:query_params] || {}
+      query_params[:'sort'] = opts[:'sort'] if !opts[:'sort'].nil?
+      query_params[:'order'] = opts[:'order'] if !opts[:'order'].nil?
 
       # header parameters
       header_params = opts[:header_params] || {}
@@ -203,6 +217,150 @@ module Lockally
       data, status_code, headers = @api_client.call_api(:DELETE, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: ApiKeysApi#revoke_api_key\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Rotate an API key
+    # Issues a successor key and puts a short expiry on this one, so **both work until the overlap ends**. That window is the point: without it, rotation is revocation with extra steps and every caller has to swap credentials in the same instant.  The successor inherits this key's scopes, its label (the label names the integration, and the integration has not changed) and its test flag. Its full `secret` is in this response and nowhere else.  The response's `expires_at` is the **predecessor's** deadline, so you can see from the rotation itself how long you have to cut over.  A key that has already been rotated cannot be rotated again: chaining overlaps would leave several live keys for one integration, which is the opposite of the intent. Rotate the successor instead. 
+    # @param id [String] 
+    # @param [Hash] opts the optional parameters
+    # @option opts [RotateApiKeyRequest] :rotate_api_key_request 
+    # @return [CreateApiKey201Response]
+    def rotate_api_key(id, opts = {})
+      data, _status_code, _headers = rotate_api_key_with_http_info(id, opts)
+      data
+    end
+
+    # Rotate an API key
+    # Issues a successor key and puts a short expiry on this one, so **both work until the overlap ends**. That window is the point: without it, rotation is revocation with extra steps and every caller has to swap credentials in the same instant.  The successor inherits this key&#39;s scopes, its label (the label names the integration, and the integration has not changed) and its test flag. Its full &#x60;secret&#x60; is in this response and nowhere else.  The response&#39;s &#x60;expires_at&#x60; is the **predecessor&#39;s** deadline, so you can see from the rotation itself how long you have to cut over.  A key that has already been rotated cannot be rotated again: chaining overlaps would leave several live keys for one integration, which is the opposite of the intent. Rotate the successor instead. 
+    # @param id [String] 
+    # @param [Hash] opts the optional parameters
+    # @option opts [RotateApiKeyRequest] :rotate_api_key_request 
+    # @return [Array<(CreateApiKey201Response, Integer, Hash)>] CreateApiKey201Response data, response status code and response headers
+    def rotate_api_key_with_http_info(id, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: ApiKeysApi.rotate_api_key ...'
+      end
+      # verify the required parameter 'id' is set
+      if @api_client.config.client_side_validation && id.nil?
+        fail ArgumentError, "Missing the required parameter 'id' when calling ApiKeysApi.rotate_api_key"
+      end
+      # resource path
+      local_var_path = '/v1/api-keys/{id}/rotate'.sub('{id}', CGI.escape(id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json', 'application/problem+json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(opts[:'rotate_api_key_request'])
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'CreateApiKey201Response'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"ApiKeysApi.rotate_api_key",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: ApiKeysApi#rotate_api_key\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Update an API key
+    # Changes a key's label, scopes or expiry in place, without reissuing the secret.  **Every field is optional and absent means unchanged.** Renaming a key does not clear its expiry. For `expires_at` there are three distinct requests: omit the field to leave the expiry alone, send a timestamp to set one, and send an explicit `null` to remove one.  Scopes are replaced wholesale, not merged. This endpoint does not restrict which scopes you may grant, because `POST /v1/api-keys` never has either: a key with `tenant:admin` can already mint a key with any scope, so `tenant:admin` is root-equivalent for key management.  A revoked key cannot be updated. 
+    # @param id [String] 
+    # @param update_api_key_request [UpdateApiKeyRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [APIKey]
+    def update_api_key(id, update_api_key_request, opts = {})
+      data, _status_code, _headers = update_api_key_with_http_info(id, update_api_key_request, opts)
+      data
+    end
+
+    # Update an API key
+    # Changes a key&#39;s label, scopes or expiry in place, without reissuing the secret.  **Every field is optional and absent means unchanged.** Renaming a key does not clear its expiry. For &#x60;expires_at&#x60; there are three distinct requests: omit the field to leave the expiry alone, send a timestamp to set one, and send an explicit &#x60;null&#x60; to remove one.  Scopes are replaced wholesale, not merged. This endpoint does not restrict which scopes you may grant, because &#x60;POST /v1/api-keys&#x60; never has either: a key with &#x60;tenant:admin&#x60; can already mint a key with any scope, so &#x60;tenant:admin&#x60; is root-equivalent for key management.  A revoked key cannot be updated. 
+    # @param id [String] 
+    # @param update_api_key_request [UpdateApiKeyRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(APIKey, Integer, Hash)>] APIKey data, response status code and response headers
+    def update_api_key_with_http_info(id, update_api_key_request, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: ApiKeysApi.update_api_key ...'
+      end
+      # verify the required parameter 'id' is set
+      if @api_client.config.client_side_validation && id.nil?
+        fail ArgumentError, "Missing the required parameter 'id' when calling ApiKeysApi.update_api_key"
+      end
+      # verify the required parameter 'update_api_key_request' is set
+      if @api_client.config.client_side_validation && update_api_key_request.nil?
+        fail ArgumentError, "Missing the required parameter 'update_api_key_request' when calling ApiKeysApi.update_api_key"
+      end
+      # resource path
+      local_var_path = '/v1/api-keys/{id}'.sub('{id}', CGI.escape(id.to_s))
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json', 'application/problem+json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(update_api_key_request)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'APIKey'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"ApiKeysApi.update_api_key",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:PATCH, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: ApiKeysApi#update_api_key\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end

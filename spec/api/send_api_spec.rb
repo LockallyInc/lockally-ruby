@@ -62,6 +62,7 @@ describe 'SendApi' do
   # @option opts [Time] :from Window start (default 7 days ago).
   # @option opts [Time] :to Window end (default now).
   # @option opts [String] :domain Filter by sender domain.
+  # @option opts [String] :tag Group the window by the sender&#39;s own tags: one tag, or a comma-separated set meaning ANY. Case-insensitive. This is the dimension that tells a transactional stream from a notification one.
   # @return [MessageStats]
   describe 'get_message_stats test' do
     it 'should work' do
@@ -75,10 +76,13 @@ describe 'SendApi' do
   # @param [Hash] opts the optional parameters
   # @option opts [String] :status 
   # @option opts [String] :sender Exact match against the &#x60;from&#x60; mailbox.
+  # @option opts [String] :tag Filter to messages carrying any of these tags. One tag, or a comma-separated set meaning ANY. Case-insensitive: the value is normalised the same way tags are on write.
   # @option opts [String] :q Free-text search across subject + sender.
   # @option opts [Time] :since Only messages queued at or after this RFC 3339 instant.
   # @option opts [String] :cursor queued_at of the prior page boundary. Pass back the &#x60;next_cursor&#x60; returned by the previous call.
   # @option opts [Integer] :limit 
+  # @option opts [String] :sort Field to order by. Only indexed columns are offered: an unindexed sort on this table is a full scan of the account&#39;s send history. status and sender are filters instead.
+  # @option opts [String] :order Defaults to desc for the default field and asc for any other. The order is always made total by a tie-break on id, so paging cannot repeat or skip a row that shares a timestamp. cursor encodes queued_at, so combining it with another sort is a 400 rather than a wrong page.
   # @return [ListMessages200Response]
   describe 'list_messages test' do
     it 'should work' do

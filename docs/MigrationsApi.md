@@ -96,7 +96,7 @@ end
 
 ## check_migration_dns
 
-> Object check_migration_dns(id)
+> <MigrationDNSCheck> check_migration_dns(id)
 
 Check DNS readiness for cutover
 
@@ -127,7 +127,7 @@ end
 
 This returns an Array which contains the response data, status code and headers.
 
-> <Array(Object, Integer, Hash)> check_migration_dns_with_http_info(id)
+> <Array(<MigrationDNSCheck>, Integer, Hash)> check_migration_dns_with_http_info(id)
 
 ```ruby
 begin
@@ -135,7 +135,7 @@ begin
   data, status_code, headers = api_instance.check_migration_dns_with_http_info(id)
   p status_code # => 2xx
   p headers # => { ... }
-  p data # => Object
+  p data # => <MigrationDNSCheck>
 rescue Lockally::ApiError => e
   puts "Error when calling MigrationsApi->check_migration_dns_with_http_info: #{e}"
 end
@@ -149,7 +149,7 @@ end
 
 ### Return type
 
-**Object**
+[**MigrationDNSCheck**](MigrationDNSCheck.md)
 
 ### Authorization
 

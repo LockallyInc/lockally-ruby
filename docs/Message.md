@@ -15,6 +15,8 @@
 | **updated_at** | **Time** |  |  |
 | **bounce_reason** | **String** |  | [optional] |
 | **size_bytes** | **Integer** |  | [optional] |
+| **metadata** | **Hash&lt;String, String&gt;** | The sender&#39;s own key/value from the send request. Always present; &#x60;{}&#x60; when none was set. | [optional] |
+| **tags** | **Array&lt;String&gt;** | Grouping labels, lowercased and deduplicated. Always present; &#x60;[]&#x60; when none were set. | [optional] |
 
 ## Example
 
@@ -32,7 +34,9 @@ instance = Lockally::Message.new(
   queued_at: null,
   updated_at: null,
   bounce_reason: null,
-  size_bytes: null
+  size_bytes: null,
+  metadata: null,
+  tags: null
 )
 ```
 

@@ -427,7 +427,7 @@ end
 
 ## list_domains
 
-> <ListDomains200Response> list_domains
+> <ListDomains200Response> list_domains(opts)
 
 List domains
 
@@ -445,10 +445,14 @@ Lockally.configure do |config|
 end
 
 api_instance = Lockally::DomainsApi.new
+opts = {
+  sort: 'domain', # String | Field to order by. This list holds tens of rows per account, so every column is offered and none needs an index.
+  order: 'asc' # String | Defaults to desc for the default field and asc for any other. Always tie-broken on id, so the order is total.
+}
 
 begin
   # List domains
-  result = api_instance.list_domains
+  result = api_instance.list_domains(opts)
   p result
 rescue Lockally::ApiError => e
   puts "Error when calling DomainsApi->list_domains: #{e}"
@@ -459,12 +463,12 @@ end
 
 This returns an Array which contains the response data, status code and headers.
 
-> <Array(<ListDomains200Response>, Integer, Hash)> list_domains_with_http_info
+> <Array(<ListDomains200Response>, Integer, Hash)> list_domains_with_http_info(opts)
 
 ```ruby
 begin
   # List domains
-  data, status_code, headers = api_instance.list_domains_with_http_info
+  data, status_code, headers = api_instance.list_domains_with_http_info(opts)
   p status_code # => 2xx
   p headers # => { ... }
   p data # => <ListDomains200Response>
@@ -475,7 +479,10 @@ end
 
 ### Parameters
 
-This endpoint does not need any parameter.
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **sort** | **String** | Field to order by. This list holds tens of rows per account, so every column is offered and none needs an index. | [optional][default to &#39;created_at&#39;] |
+| **order** | **String** | Defaults to desc for the default field and asc for any other. Always tie-broken on id, so the order is total. | [optional] |
 
 ### Return type
 

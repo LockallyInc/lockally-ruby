@@ -18,6 +18,8 @@
 | **status** | **String** |  |  |
 | **created_at** | **Time** |  |  |
 | **updated_at** | **Time** |  |  |
+| **external_system** | **String** | The system that owns this contact&#39;s external id. Absent on contacts made by hand. | [optional] |
+| **external_id** | **String** | The contact&#39;s id in &#x60;external_system&#x60;. Absent on contacts made by hand. | [optional] |
 
 ## Example
 
@@ -38,7 +40,9 @@ instance = Lockally::Contact.new(
   role: null,
   status: null,
   created_at: null,
-  updated_at: null
+  updated_at: null,
+  external_system: null,
+  external_id: null
 )
 ```
 

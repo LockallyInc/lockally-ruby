@@ -296,7 +296,7 @@ module Lockally
 
     # Full tenant health report
     # @param [Hash] opts the optional parameters
-    # @return [Object]
+    # @return [TenantHealthReport]
     def get_tenant_health(opts = {})
       data, _status_code, _headers = get_tenant_health_with_http_info(opts)
       data
@@ -304,7 +304,7 @@ module Lockally
 
     # Full tenant health report
     # @param [Hash] opts the optional parameters
-    # @return [Array<(Object, Integer, Hash)>] Object data, response status code and response headers
+    # @return [Array<(TenantHealthReport, Integer, Hash)>] TenantHealthReport data, response status code and response headers
     def get_tenant_health_with_http_info(opts = {})
       if @api_client.config.debugging
         @api_client.config.logger.debug 'Calling API: DashboardApi.get_tenant_health ...'
@@ -327,7 +327,7 @@ module Lockally
       post_body = opts[:debug_body]
 
       # return_type
-      return_type = opts[:debug_return_type] || 'Object'
+      return_type = opts[:debug_return_type] || 'TenantHealthReport'
 
       # auth_names
       auth_names = opts[:debug_auth_names] || ['bearerAuth']

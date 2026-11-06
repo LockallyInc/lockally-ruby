@@ -4,7 +4,7 @@
 
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
-| **mailbox_email** | **String** |  |  |
+| **mailbox_email** | **String** |  | [optional] |
 | **recovery_blob** | **String** |  |  |
 
 ## Example

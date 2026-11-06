@@ -27,6 +27,16 @@ module Lockally
 
     attr_accessor :version
 
+    attr_accessor :created_at
+
+    attr_accessor :rotated_at
+
+    attr_accessor :has_recovery
+
+    attr_accessor :recovery_set_at
+
+    attr_accessor :recovery_blob
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -35,7 +45,12 @@ module Lockally
         :'public_key' => :'public_key',
         :'encrypted_private_key' => :'encrypted_private_key',
         :'kdf_params' => :'kdf_params',
-        :'version' => :'version'
+        :'version' => :'version',
+        :'created_at' => :'created_at',
+        :'rotated_at' => :'rotated_at',
+        :'has_recovery' => :'has_recovery',
+        :'recovery_set_at' => :'recovery_set_at',
+        :'recovery_blob' => :'recovery_blob'
       }
     end
 
@@ -57,7 +72,12 @@ module Lockally
         :'public_key' => :'String',
         :'encrypted_private_key' => :'String',
         :'kdf_params' => :'Object',
-        :'version' => :'Integer'
+        :'version' => :'Integer',
+        :'created_at' => :'Time',
+        :'rotated_at' => :'Time',
+        :'has_recovery' => :'Boolean',
+        :'recovery_set_at' => :'Time',
+        :'recovery_blob' => :'String'
       }
     end
 
@@ -106,6 +126,26 @@ module Lockally
       if attributes.key?(:'version')
         self.version = attributes[:'version']
       end
+
+      if attributes.key?(:'created_at')
+        self.created_at = attributes[:'created_at']
+      end
+
+      if attributes.key?(:'rotated_at')
+        self.rotated_at = attributes[:'rotated_at']
+      end
+
+      if attributes.key?(:'has_recovery')
+        self.has_recovery = attributes[:'has_recovery']
+      end
+
+      if attributes.key?(:'recovery_set_at')
+        self.recovery_set_at = attributes[:'recovery_set_at']
+      end
+
+      if attributes.key?(:'recovery_blob')
+        self.recovery_blob = attributes[:'recovery_blob']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -133,7 +173,12 @@ module Lockally
           public_key == o.public_key &&
           encrypted_private_key == o.encrypted_private_key &&
           kdf_params == o.kdf_params &&
-          version == o.version
+          version == o.version &&
+          created_at == o.created_at &&
+          rotated_at == o.rotated_at &&
+          has_recovery == o.has_recovery &&
+          recovery_set_at == o.recovery_set_at &&
+          recovery_blob == o.recovery_blob
     end
 
     # @see the `==` method
@@ -145,7 +190,7 @@ module Lockally
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, email, public_key, encrypted_private_key, kdf_params, version].hash
+      [id, email, public_key, encrypted_private_key, kdf_params, version, created_at, rotated_at, has_recovery, recovery_set_at, recovery_blob].hash
     end
 
     # Builds the object from hash

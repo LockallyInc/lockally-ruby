@@ -83,7 +83,7 @@ module Lockally
     # Check DNS readiness for cutover
     # @param id [String] 
     # @param [Hash] opts the optional parameters
-    # @return [Object]
+    # @return [MigrationDNSCheck]
     def check_migration_dns(id, opts = {})
       data, _status_code, _headers = check_migration_dns_with_http_info(id, opts)
       data
@@ -92,7 +92,7 @@ module Lockally
     # Check DNS readiness for cutover
     # @param id [String] 
     # @param [Hash] opts the optional parameters
-    # @return [Array<(Object, Integer, Hash)>] Object data, response status code and response headers
+    # @return [Array<(MigrationDNSCheck, Integer, Hash)>] MigrationDNSCheck data, response status code and response headers
     def check_migration_dns_with_http_info(id, opts = {})
       if @api_client.config.debugging
         @api_client.config.logger.debug 'Calling API: MigrationsApi.check_migration_dns ...'
@@ -119,7 +119,7 @@ module Lockally
       post_body = opts[:debug_body]
 
       # return_type
-      return_type = opts[:debug_return_type] || 'Object'
+      return_type = opts[:debug_return_type] || 'MigrationDNSCheck'
 
       # auth_names
       auth_names = opts[:debug_auth_names] || ['bearerAuth']
