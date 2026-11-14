@@ -7,16 +7,12 @@ All URIs are relative to *https://api.lockally.com*
 | [**add_shared_member**](MailboxesApi.md#add_shared_member) | **POST** /v1/mailboxes/{email}/members | Add a shared mailbox member |
 | [**create_mailbox**](MailboxesApi.md#create_mailbox) | **POST** /v1/mailboxes | Create a mailbox |
 | [**delete_mailbox**](MailboxesApi.md#delete_mailbox) | **DELETE** /v1/mailboxes/{email} | Soft-delete a mailbox |
-| [**delete_vacation_responder**](MailboxesApi.md#delete_vacation_responder) | **DELETE** /v1/mailboxes/{email}/vacation | Remove the vacation responder |
 | [**download_mailbox_export**](MailboxesApi.md#download_mailbox_export) | **GET** /v1/mailboxes/{email}/export/download | Download a previously-issued mailbox export |
 | [**export_mailbox**](MailboxesApi.md#export_mailbox) | **POST** /v1/mailboxes/{email}/export | Request a mailbox export |
 | [**get_mailbox**](MailboxesApi.md#get_mailbox) | **GET** /v1/mailboxes/{email} | Get a mailbox |
-| [**get_vacation_responder**](MailboxesApi.md#get_vacation_responder) | **GET** /v1/mailboxes/{email}/vacation | Get the vacation responder |
 | [**list_mailboxes**](MailboxesApi.md#list_mailboxes) | **GET** /v1/mailboxes | List mailboxes |
 | [**list_shared_members**](MailboxesApi.md#list_shared_members) | **GET** /v1/mailboxes/{email}/members | List shared mailbox members |
-| [**list_vacation_responders**](MailboxesApi.md#list_vacation_responders) | **GET** /v1/vacation | List all vacation responders |
 | [**remove_shared_member**](MailboxesApi.md#remove_shared_member) | **DELETE** /v1/mailboxes/{email}/members/{memberEmail} | Remove a shared mailbox member |
-| [**set_vacation_responder**](MailboxesApi.md#set_vacation_responder) | **PUT** /v1/mailboxes/{email}/vacation | Set the vacation responder |
 | [**update_mailbox**](MailboxesApi.md#update_mailbox) | **PATCH** /v1/mailboxes/{email} | Update a mailbox |
 
 
@@ -203,74 +199,6 @@ begin
   p data # => nil
 rescue Lockally::ApiError => e
   puts "Error when calling MailboxesApi->delete_mailbox_with_http_info: #{e}"
-end
-```
-
-### Parameters
-
-| Name | Type | Description | Notes |
-| ---- | ---- | ----------- | ----- |
-| **email** | **String** |  |  |
-
-### Return type
-
-nil (empty response body)
-
-### Authorization
-
-[bearerAuth](../README.md#bearerAuth)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/problem+json
-
-
-## delete_vacation_responder
-
-> delete_vacation_responder(email)
-
-Remove the vacation responder
-
-Idempotent, 204 whether or not a row existed.
-
-### Examples
-
-```ruby
-require 'time'
-require 'lockally'
-# setup authorization
-Lockally.configure do |config|
-  # Configure Bearer authorization (lk_live_<prefix>_<secret>): bearerAuth
-  config.access_token = 'YOUR_BEARER_TOKEN'
-end
-
-api_instance = Lockally::MailboxesApi.new
-email = 'email_example' # String | 
-
-begin
-  # Remove the vacation responder
-  api_instance.delete_vacation_responder(email)
-rescue Lockally::ApiError => e
-  puts "Error when calling MailboxesApi->delete_vacation_responder: #{e}"
-end
-```
-
-#### Using the delete_vacation_responder_with_http_info variant
-
-This returns an Array which contains the response data (`nil` in this case), status code and headers.
-
-> <Array(nil, Integer, Hash)> delete_vacation_responder_with_http_info(email)
-
-```ruby
-begin
-  # Remove the vacation responder
-  data, status_code, headers = api_instance.delete_vacation_responder_with_http_info(email)
-  p status_code # => 2xx
-  p headers # => { ... }
-  p data # => nil
-rescue Lockally::ApiError => e
-  puts "Error when calling MailboxesApi->delete_vacation_responder_with_http_info: #{e}"
 end
 ```
 
@@ -496,75 +424,6 @@ end
 - **Accept**: application/json, application/problem+json
 
 
-## get_vacation_responder
-
-> <VacationResponder> get_vacation_responder(email)
-
-Get the vacation responder
-
-Returns the stored vacation rule or 404 if none is set.
-
-### Examples
-
-```ruby
-require 'time'
-require 'lockally'
-# setup authorization
-Lockally.configure do |config|
-  # Configure Bearer authorization (lk_live_<prefix>_<secret>): bearerAuth
-  config.access_token = 'YOUR_BEARER_TOKEN'
-end
-
-api_instance = Lockally::MailboxesApi.new
-email = 'email_example' # String | 
-
-begin
-  # Get the vacation responder
-  result = api_instance.get_vacation_responder(email)
-  p result
-rescue Lockally::ApiError => e
-  puts "Error when calling MailboxesApi->get_vacation_responder: #{e}"
-end
-```
-
-#### Using the get_vacation_responder_with_http_info variant
-
-This returns an Array which contains the response data, status code and headers.
-
-> <Array(<VacationResponder>, Integer, Hash)> get_vacation_responder_with_http_info(email)
-
-```ruby
-begin
-  # Get the vacation responder
-  data, status_code, headers = api_instance.get_vacation_responder_with_http_info(email)
-  p status_code # => 2xx
-  p headers # => { ... }
-  p data # => <VacationResponder>
-rescue Lockally::ApiError => e
-  puts "Error when calling MailboxesApi->get_vacation_responder_with_http_info: #{e}"
-end
-```
-
-### Parameters
-
-| Name | Type | Description | Notes |
-| ---- | ---- | ----------- | ----- |
-| **email** | **String** |  |  |
-
-### Return type
-
-[**VacationResponder**](VacationResponder.md)
-
-### Authorization
-
-[bearerAuth](../README.md#bearerAuth)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json, application/problem+json
-
-
 ## list_mailboxes
 
 > <ListMailboxes200Response> list_mailboxes(opts)
@@ -703,72 +562,6 @@ end
 - **Accept**: application/json, application/problem+json
 
 
-## list_vacation_responders
-
-> <ListVacationResponders200Response> list_vacation_responders
-
-List all vacation responders
-
-Returns every vacation responder for the calling tenant.
-
-### Examples
-
-```ruby
-require 'time'
-require 'lockally'
-# setup authorization
-Lockally.configure do |config|
-  # Configure Bearer authorization (lk_live_<prefix>_<secret>): bearerAuth
-  config.access_token = 'YOUR_BEARER_TOKEN'
-end
-
-api_instance = Lockally::MailboxesApi.new
-
-begin
-  # List all vacation responders
-  result = api_instance.list_vacation_responders
-  p result
-rescue Lockally::ApiError => e
-  puts "Error when calling MailboxesApi->list_vacation_responders: #{e}"
-end
-```
-
-#### Using the list_vacation_responders_with_http_info variant
-
-This returns an Array which contains the response data, status code and headers.
-
-> <Array(<ListVacationResponders200Response>, Integer, Hash)> list_vacation_responders_with_http_info
-
-```ruby
-begin
-  # List all vacation responders
-  data, status_code, headers = api_instance.list_vacation_responders_with_http_info
-  p status_code # => 2xx
-  p headers # => { ... }
-  p data # => <ListVacationResponders200Response>
-rescue Lockally::ApiError => e
-  puts "Error when calling MailboxesApi->list_vacation_responders_with_http_info: #{e}"
-end
-```
-
-### Parameters
-
-This endpoint does not need any parameter.
-
-### Return type
-
-[**ListVacationResponders200Response**](ListVacationResponders200Response.md)
-
-### Authorization
-
-[bearerAuth](../README.md#bearerAuth)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json, application/problem+json
-
-
 ## remove_shared_member
 
 > remove_shared_member(email, member_email)
@@ -835,77 +628,6 @@ nil (empty response body)
 
 - **Content-Type**: Not defined
 - **Accept**: application/problem+json
-
-
-## set_vacation_responder
-
-> <VacationResponder> set_vacation_responder(email, set_vacation_responder_request)
-
-Set the vacation responder
-
-Upsert, same endpoint creates or replaces the rule. Clears `synced_at`; the rule is staged until a later sync pushes it to the mail server. 
-
-### Examples
-
-```ruby
-require 'time'
-require 'lockally'
-# setup authorization
-Lockally.configure do |config|
-  # Configure Bearer authorization (lk_live_<prefix>_<secret>): bearerAuth
-  config.access_token = 'YOUR_BEARER_TOKEN'
-end
-
-api_instance = Lockally::MailboxesApi.new
-email = 'email_example' # String | 
-set_vacation_responder_request = Lockally::SetVacationResponderRequest.new({params: Lockally::VacationParams.new({subject: 'Out of office until June 5', body: 'Hi! I'm away until June 5. For urgent matters please contact ...'})}) # SetVacationResponderRequest | 
-
-begin
-  # Set the vacation responder
-  result = api_instance.set_vacation_responder(email, set_vacation_responder_request)
-  p result
-rescue Lockally::ApiError => e
-  puts "Error when calling MailboxesApi->set_vacation_responder: #{e}"
-end
-```
-
-#### Using the set_vacation_responder_with_http_info variant
-
-This returns an Array which contains the response data, status code and headers.
-
-> <Array(<VacationResponder>, Integer, Hash)> set_vacation_responder_with_http_info(email, set_vacation_responder_request)
-
-```ruby
-begin
-  # Set the vacation responder
-  data, status_code, headers = api_instance.set_vacation_responder_with_http_info(email, set_vacation_responder_request)
-  p status_code # => 2xx
-  p headers # => { ... }
-  p data # => <VacationResponder>
-rescue Lockally::ApiError => e
-  puts "Error when calling MailboxesApi->set_vacation_responder_with_http_info: #{e}"
-end
-```
-
-### Parameters
-
-| Name | Type | Description | Notes |
-| ---- | ---- | ----------- | ----- |
-| **email** | **String** |  |  |
-| **set_vacation_responder_request** | [**SetVacationResponderRequest**](SetVacationResponderRequest.md) |  |  |
-
-### Return type
-
-[**VacationResponder**](VacationResponder.md)
-
-### Authorization
-
-[bearerAuth](../README.md#bearerAuth)
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json, application/problem+json
 
 
 ## update_mailbox

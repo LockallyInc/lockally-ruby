@@ -1,7 +1,7 @@
 =begin
-#lockally control plane
+#Lockally API
 
-#The lockally control plane lets integrators and direct customers manage everything except actual mail data flow (which uses standard JMAP / IMAP / SMTP-submission against the data plane endpoints).  **Authentication.** All `/v1/*` endpoints require a Bearer API key in the `Authorization` header. Keys are formatted `lk_live_<8-char-prefix>_<32-char-secret>`, or `lk_test_<...>` for a test key. Create keys in the dashboard, or with `POST /v1/api-keys` using a key that holds `tenant:admin`.  The key's plan is checked on every request, so a key stops working if the account moves to a plan without API access, and works again if it moves back.  **Errors.** Failures return [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) `application/problem+json` documents.  **Scopes.** Each endpoint requires a specific scope on the presented key. Insufficient scope returns `403` with the required scope name in `detail`. 
+#Official Lockally SDK for Ruby: send email and manage mailboxes, domains and webhooks through the Lockally API.  **Authentication.** All `/v1/*` endpoints require a Bearer API key in the `Authorization` header. Keys are formatted `lk_live_<8-char-prefix>_<32-char-secret>`, or `lk_test_<...>` for a test key. Create keys in the dashboard, or with `POST /v1/api-keys` using a key that holds `tenant:admin`.  The key's plan is checked on every request, so a key stops working if the account moves to a plan without API access, and works again if it moves back.  **Errors.** Failures return [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) `application/problem+json` documents.  **Scopes.** Each endpoint requires a specific scope on the presented key. Insufficient scope returns `403` with the required scope name in `detail`. 
 
 The version of the OpenAPI document: 0.1.0
 Contact: support@lockally.com
@@ -157,7 +157,6 @@ require 'lockally/models/list_shared_members200_response'
 require 'lockally/models/list_suppressions200_response'
 require 'lockally/models/list_templates200_response'
 require 'lockally/models/list_users200_response'
-require 'lockally/models/list_vacation_responders200_response'
 require 'lockally/models/list_webhooks200_response'
 require 'lockally/models/mailbox'
 require 'lockally/models/mailbox_grant'
@@ -198,7 +197,6 @@ require 'lockally/models/send_email_batch_request'
 require 'lockally/models/send_email_request'
 require 'lockally/models/send_email_request_attachments_inner'
 require 'lockally/models/send_message'
-require 'lockally/models/set_vacation_responder_request'
 require 'lockally/models/shared_member'
 require 'lockally/models/signup_request'
 require 'lockally/models/simulated_inbound'
@@ -239,8 +237,6 @@ require 'lockally/models/update_user_request'
 require 'lockally/models/update_webhook_request'
 require 'lockally/models/user'
 require 'lockally/models/user_event'
-require 'lockally/models/vacation_params'
-require 'lockally/models/vacation_responder'
 require 'lockally/models/webhook'
 require 'lockally/models/whoami'
 require 'lockally/models/whoami_key'

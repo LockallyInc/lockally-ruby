@@ -1,7 +1,7 @@
 =begin
-#lockally control plane
+#Lockally API
 
-#The lockally control plane lets integrators and direct customers manage everything except actual mail data flow (which uses standard JMAP / IMAP / SMTP-submission against the data plane endpoints).  **Authentication.** All `/v1/*` endpoints require a Bearer API key in the `Authorization` header. Keys are formatted `lk_live_<8-char-prefix>_<32-char-secret>`, or `lk_test_<...>` for a test key. Create keys in the dashboard, or with `POST /v1/api-keys` using a key that holds `tenant:admin`.  The key's plan is checked on every request, so a key stops working if the account moves to a plan without API access, and works again if it moves back.  **Errors.** Failures return [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) `application/problem+json` documents.  **Scopes.** Each endpoint requires a specific scope on the presented key. Insufficient scope returns `403` with the required scope name in `detail`. 
+#Official Lockally SDK for Ruby: send email and manage mailboxes, domains and webhooks through the Lockally API.  **Authentication.** All `/v1/*` endpoints require a Bearer API key in the `Authorization` header. Keys are formatted `lk_live_<8-char-prefix>_<32-char-secret>`, or `lk_test_<...>` for a test key. Create keys in the dashboard, or with `POST /v1/api-keys` using a key that holds `tenant:admin`.  The key's plan is checked on every request, so a key stops working if the account moves to a plan without API access, and works again if it moves back.  **Errors.** Failures return [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) `application/problem+json` documents.  **Scopes.** Each endpoint requires a specific scope on the presented key. Insufficient scope returns `403` with the required scope name in `detail`. 
 
 The version of the OpenAPI document: 0.1.0
 Contact: support@lockally.com
@@ -68,18 +68,6 @@ describe 'MailboxesApi' do
     end
   end
 
-  # unit tests for delete_vacation_responder
-  # Remove the vacation responder
-  # Idempotent, 204 whether or not a row existed.
-  # @param email 
-  # @param [Hash] opts the optional parameters
-  # @return [nil]
-  describe 'delete_vacation_responder test' do
-    it 'should work' do
-      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
-    end
-  end
-
   # unit tests for download_mailbox_export
   # Download a previously-issued mailbox export
   # Public endpoint (no Authorization header). Validates the one-shot token from the URL, marks it used, and streams an mbox file. Second GET with the same token returns 404, tokens are single-use. 
@@ -116,18 +104,6 @@ describe 'MailboxesApi' do
     end
   end
 
-  # unit tests for get_vacation_responder
-  # Get the vacation responder
-  # Returns the stored vacation rule or 404 if none is set.
-  # @param email 
-  # @param [Hash] opts the optional parameters
-  # @return [VacationResponder]
-  describe 'get_vacation_responder test' do
-    it 'should work' do
-      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
-    end
-  end
-
   # unit tests for list_mailboxes
   # List mailboxes
   # Returns mailboxes under the calling tenant, active and soft-deleted. &#x60;?limit&#x3D;N&#x60; between 1 and 200 (default 50). 
@@ -151,17 +127,6 @@ describe 'MailboxesApi' do
     end
   end
 
-  # unit tests for list_vacation_responders
-  # List all vacation responders
-  # Returns every vacation responder for the calling tenant.
-  # @param [Hash] opts the optional parameters
-  # @return [ListVacationResponders200Response]
-  describe 'list_vacation_responders test' do
-    it 'should work' do
-      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
-    end
-  end
-
   # unit tests for remove_shared_member
   # Remove a shared mailbox member
   # @param email 
@@ -169,19 +134,6 @@ describe 'MailboxesApi' do
   # @param [Hash] opts the optional parameters
   # @return [nil]
   describe 'remove_shared_member test' do
-    it 'should work' do
-      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
-    end
-  end
-
-  # unit tests for set_vacation_responder
-  # Set the vacation responder
-  # Upsert, same endpoint creates or replaces the rule. Clears &#x60;synced_at&#x60;; the rule is staged until a later sync pushes it to the mail server. 
-  # @param email 
-  # @param set_vacation_responder_request 
-  # @param [Hash] opts the optional parameters
-  # @return [VacationResponder]
-  describe 'set_vacation_responder test' do
     it 'should work' do
       # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
     end

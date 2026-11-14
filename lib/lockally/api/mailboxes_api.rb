@@ -1,7 +1,7 @@
 =begin
-#lockally control plane
+#Lockally API
 
-#The lockally control plane lets integrators and direct customers manage everything except actual mail data flow (which uses standard JMAP / IMAP / SMTP-submission against the data plane endpoints).  **Authentication.** All `/v1/*` endpoints require a Bearer API key in the `Authorization` header. Keys are formatted `lk_live_<8-char-prefix>_<32-char-secret>`, or `lk_test_<...>` for a test key. Create keys in the dashboard, or with `POST /v1/api-keys` using a key that holds `tenant:admin`.  The key's plan is checked on every request, so a key stops working if the account moves to a plan without API access, and works again if it moves back.  **Errors.** Failures return [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) `application/problem+json` documents.  **Scopes.** Each endpoint requires a specific scope on the presented key. Insufficient scope returns `403` with the required scope name in `detail`. 
+#Official Lockally SDK for Ruby: send email and manage mailboxes, domains and webhooks through the Lockally API.  **Authentication.** All `/v1/*` endpoints require a Bearer API key in the `Authorization` header. Keys are formatted `lk_live_<8-char-prefix>_<32-char-secret>`, or `lk_test_<...>` for a test key. Create keys in the dashboard, or with `POST /v1/api-keys` using a key that holds `tenant:admin`.  The key's plan is checked on every request, so a key stops working if the account moves to a plan without API access, and works again if it moves back.  **Errors.** Failures return [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) `application/problem+json` documents.  **Scopes.** Each endpoint requires a specific scope on the presented key. Insufficient scope returns `403` with the required scope name in `detail`. 
 
 The version of the OpenAPI document: 0.1.0
 Contact: support@lockally.com
@@ -222,69 +222,6 @@ module Lockally
       return data, status_code, headers
     end
 
-    # Remove the vacation responder
-    # Idempotent, 204 whether or not a row existed.
-    # @param email [String] 
-    # @param [Hash] opts the optional parameters
-    # @return [nil]
-    def delete_vacation_responder(email, opts = {})
-      delete_vacation_responder_with_http_info(email, opts)
-      nil
-    end
-
-    # Remove the vacation responder
-    # Idempotent, 204 whether or not a row existed.
-    # @param email [String] 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(nil, Integer, Hash)>] nil, response status code and response headers
-    def delete_vacation_responder_with_http_info(email, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug 'Calling API: MailboxesApi.delete_vacation_responder ...'
-      end
-      # verify the required parameter 'email' is set
-      if @api_client.config.client_side_validation && email.nil?
-        fail ArgumentError, "Missing the required parameter 'email' when calling MailboxesApi.delete_vacation_responder"
-      end
-      # resource path
-      local_var_path = '/v1/mailboxes/{email}/vacation'.sub('{email}', CGI.escape(email.to_s))
-
-      # query parameters
-      query_params = opts[:query_params] || {}
-
-      # header parameters
-      header_params = opts[:header_params] || {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/problem+json']) unless header_params['Accept']
-
-      # form parameters
-      form_params = opts[:form_params] || {}
-
-      # http body (model)
-      post_body = opts[:debug_body]
-
-      # return_type
-      return_type = opts[:debug_return_type]
-
-      # auth_names
-      auth_names = opts[:debug_auth_names] || ['bearerAuth']
-
-      new_options = opts.merge(
-        :operation => :"MailboxesApi.delete_vacation_responder",
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => return_type
-      )
-
-      data, status_code, headers = @api_client.call_api(:DELETE, local_var_path, new_options)
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: MailboxesApi#delete_vacation_responder\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
     # Download a previously-issued mailbox export
     # Public endpoint (no Authorization header). Validates the one-shot token from the URL, marks it used, and streams an mbox file. Second GET with the same token returns 404, tokens are single-use. 
     # @param email [String] 
@@ -479,69 +416,6 @@ module Lockally
       return data, status_code, headers
     end
 
-    # Get the vacation responder
-    # Returns the stored vacation rule or 404 if none is set.
-    # @param email [String] 
-    # @param [Hash] opts the optional parameters
-    # @return [VacationResponder]
-    def get_vacation_responder(email, opts = {})
-      data, _status_code, _headers = get_vacation_responder_with_http_info(email, opts)
-      data
-    end
-
-    # Get the vacation responder
-    # Returns the stored vacation rule or 404 if none is set.
-    # @param email [String] 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(VacationResponder, Integer, Hash)>] VacationResponder data, response status code and response headers
-    def get_vacation_responder_with_http_info(email, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug 'Calling API: MailboxesApi.get_vacation_responder ...'
-      end
-      # verify the required parameter 'email' is set
-      if @api_client.config.client_side_validation && email.nil?
-        fail ArgumentError, "Missing the required parameter 'email' when calling MailboxesApi.get_vacation_responder"
-      end
-      # resource path
-      local_var_path = '/v1/mailboxes/{email}/vacation'.sub('{email}', CGI.escape(email.to_s))
-
-      # query parameters
-      query_params = opts[:query_params] || {}
-
-      # header parameters
-      header_params = opts[:header_params] || {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json', 'application/problem+json']) unless header_params['Accept']
-
-      # form parameters
-      form_params = opts[:form_params] || {}
-
-      # http body (model)
-      post_body = opts[:debug_body]
-
-      # return_type
-      return_type = opts[:debug_return_type] || 'VacationResponder'
-
-      # auth_names
-      auth_names = opts[:debug_auth_names] || ['bearerAuth']
-
-      new_options = opts.merge(
-        :operation => :"MailboxesApi.get_vacation_responder",
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => return_type
-      )
-
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: MailboxesApi#get_vacation_responder\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
     # List mailboxes
     # Returns mailboxes under the calling tenant, active and soft-deleted. `?limit=N` between 1 and 200 (default 50). 
     # @param [Hash] opts the optional parameters
@@ -671,63 +545,6 @@ module Lockally
       return data, status_code, headers
     end
 
-    # List all vacation responders
-    # Returns every vacation responder for the calling tenant.
-    # @param [Hash] opts the optional parameters
-    # @return [ListVacationResponders200Response]
-    def list_vacation_responders(opts = {})
-      data, _status_code, _headers = list_vacation_responders_with_http_info(opts)
-      data
-    end
-
-    # List all vacation responders
-    # Returns every vacation responder for the calling tenant.
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(ListVacationResponders200Response, Integer, Hash)>] ListVacationResponders200Response data, response status code and response headers
-    def list_vacation_responders_with_http_info(opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug 'Calling API: MailboxesApi.list_vacation_responders ...'
-      end
-      # resource path
-      local_var_path = '/v1/vacation'
-
-      # query parameters
-      query_params = opts[:query_params] || {}
-
-      # header parameters
-      header_params = opts[:header_params] || {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json', 'application/problem+json']) unless header_params['Accept']
-
-      # form parameters
-      form_params = opts[:form_params] || {}
-
-      # http body (model)
-      post_body = opts[:debug_body]
-
-      # return_type
-      return_type = opts[:debug_return_type] || 'ListVacationResponders200Response'
-
-      # auth_names
-      auth_names = opts[:debug_auth_names] || ['bearerAuth']
-
-      new_options = opts.merge(
-        :operation => :"MailboxesApi.list_vacation_responders",
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => return_type
-      )
-
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: MailboxesApi#list_vacation_responders\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
     # Remove a shared mailbox member
     # @param email [String] 
     # @param member_email [String] 
@@ -791,80 +608,6 @@ module Lockally
       data, status_code, headers = @api_client.call_api(:DELETE, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: MailboxesApi#remove_shared_member\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # Set the vacation responder
-    # Upsert, same endpoint creates or replaces the rule. Clears `synced_at`; the rule is staged until a later sync pushes it to the mail server. 
-    # @param email [String] 
-    # @param set_vacation_responder_request [SetVacationResponderRequest] 
-    # @param [Hash] opts the optional parameters
-    # @return [VacationResponder]
-    def set_vacation_responder(email, set_vacation_responder_request, opts = {})
-      data, _status_code, _headers = set_vacation_responder_with_http_info(email, set_vacation_responder_request, opts)
-      data
-    end
-
-    # Set the vacation responder
-    # Upsert, same endpoint creates or replaces the rule. Clears &#x60;synced_at&#x60;; the rule is staged until a later sync pushes it to the mail server. 
-    # @param email [String] 
-    # @param set_vacation_responder_request [SetVacationResponderRequest] 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(VacationResponder, Integer, Hash)>] VacationResponder data, response status code and response headers
-    def set_vacation_responder_with_http_info(email, set_vacation_responder_request, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug 'Calling API: MailboxesApi.set_vacation_responder ...'
-      end
-      # verify the required parameter 'email' is set
-      if @api_client.config.client_side_validation && email.nil?
-        fail ArgumentError, "Missing the required parameter 'email' when calling MailboxesApi.set_vacation_responder"
-      end
-      # verify the required parameter 'set_vacation_responder_request' is set
-      if @api_client.config.client_side_validation && set_vacation_responder_request.nil?
-        fail ArgumentError, "Missing the required parameter 'set_vacation_responder_request' when calling MailboxesApi.set_vacation_responder"
-      end
-      # resource path
-      local_var_path = '/v1/mailboxes/{email}/vacation'.sub('{email}', CGI.escape(email.to_s))
-
-      # query parameters
-      query_params = opts[:query_params] || {}
-
-      # header parameters
-      header_params = opts[:header_params] || {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json', 'application/problem+json']) unless header_params['Accept']
-      # HTTP header 'Content-Type'
-      content_type = @api_client.select_header_content_type(['application/json'])
-      if !content_type.nil?
-          header_params['Content-Type'] = content_type
-      end
-
-      # form parameters
-      form_params = opts[:form_params] || {}
-
-      # http body (model)
-      post_body = opts[:debug_body] || @api_client.object_to_http_body(set_vacation_responder_request)
-
-      # return_type
-      return_type = opts[:debug_return_type] || 'VacationResponder'
-
-      # auth_names
-      auth_names = opts[:debug_auth_names] || ['bearerAuth']
-
-      new_options = opts.merge(
-        :operation => :"MailboxesApi.set_vacation_responder",
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => return_type
-      )
-
-      data, status_code, headers = @api_client.call_api(:PUT, local_var_path, new_options)
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: MailboxesApi#set_vacation_responder\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end

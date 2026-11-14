@@ -1,13 +1,22 @@
 # Release workflow for the Ruby SDK (RubyGems gem `lockally`).
 #
-# TEMPLATE — inert in this monorepo. Copy to `.github/workflows/publish.yml` in
+# TEMPLATE, inert in this monorepo. Copy to `.github/workflows/publish.yml` in
 # the SDK's own repo (generated `sdk/ruby/` tree, pushed to
 # github.com/lockallyinc/lockally-ruby). Tag-driven: push `vX.Y.Z`.
 #
-# One-time setup:
-#   - Add repo secret RUBYGEMS_API_KEY = a RubyGems API key scoped to push the
-#     `lockally` gem. (RubyGems also supports OIDC trusted publishing if you
-#     prefer no token — swap in rubygems/release-gem@v1.)
+# This template is shared with the Rails adapter (gem `lockally-rails`,
+# github.com/lockallyinc/lockally-rails), which needs a trusted publisher of its
+# own: a policy names one gem and one repository.
+#
+# One-time setup (OIDC trusted publishing, so NO API key and no repo secret):
+#   - On rubygems.org → the gem → Trusted publishers → Create → GitHub Actions:
+#       Repository owner:  LockallyInc
+#       Repository name:   lockally-ruby
+#       Workflow filename: publish.yml
+#       Environment:       leave empty (this workflow declares none)
+#   - `id-token: write` below is what rubygems.org verifies. Nothing is stored.
+#   Claude never handles these credentials: the policy is registered by the
+#   account owner on rubygems.org.
 name: Publish RubyGems
 
 on:
@@ -16,6 +25,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write   # OIDC trusted publishing (no stored API key)
 
 jobs:
   publish:
@@ -26,6 +36,17 @@ jobs:
         with:
           ruby-version: '3.3'
       - run: gem build *.gemspec
-      - run: gem push *.gem
-        env:
-          GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+      # Exchanges the job's OIDC token for a short-lived RubyGems key and exports
+      # it as GEM_HOST_API_KEY for the push below. With no inputs the action uses
+      # trusted publishing; it fails the step if rubygems.org declines.
+      - name: Configure RubyGems credentials (OIDC)
+        uses: rubygems/configure-rubygems-credentials@v2.1.0
+      # A belt-and-braces check on the exchange. `gem push` with no credential
+      # asks for one on stdin and dies on EOF, which says nothing about why.
+      - name: Push the gem
+        run: |
+          if [ -z "${GEM_HOST_API_KEY:-}" ]; then
+            echo "::error::the OIDC exchange produced no RubyGems credential, so there is no trusted publisher matching this run. Check owner LockallyInc, repository ${GITHUB_REPOSITORY#*/}, workflow filename publish.yml and no environment on the gem's Trusted publishers page."
+            exit 1
+          fi
+          gem push *.gem

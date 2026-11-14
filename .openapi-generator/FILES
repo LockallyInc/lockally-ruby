@@ -165,7 +165,6 @@ docs/ListSharedMembers200Response.md
 docs/ListSuppressions200Response.md
 docs/ListTemplates200Response.md
 docs/ListUsers200Response.md
-docs/ListVacationResponders200Response.md
 docs/ListWebhooks200Response.md
 docs/Mailbox.md
 docs/MailboxGrant.md
@@ -210,7 +209,6 @@ docs/SendEmailBatchRequest.md
 docs/SendEmailRequest.md
 docs/SendEmailRequestAttachmentsInner.md
 docs/SendMessage.md
-docs/SetVacationResponderRequest.md
 docs/SharedMember.md
 docs/SignupApi.md
 docs/SignupRequest.md
@@ -257,8 +255,6 @@ docs/UpdateWebhookRequest.md
 docs/User.md
 docs/UserEvent.md
 docs/UsersApi.md
-docs/VacationParams.md
-docs/VacationResponder.md
 docs/Webhook.md
 docs/WebhooksApi.md
 docs/Whoami.md
@@ -439,7 +435,6 @@ lib/lockally/models/list_shared_members200_response.rb
 lib/lockally/models/list_suppressions200_response.rb
 lib/lockally/models/list_templates200_response.rb
 lib/lockally/models/list_users200_response.rb
-lib/lockally/models/list_vacation_responders200_response.rb
 lib/lockally/models/list_webhooks200_response.rb
 lib/lockally/models/mailbox.rb
 lib/lockally/models/mailbox_grant.rb
@@ -480,7 +475,6 @@ lib/lockally/models/send_email_batch_request.rb
 lib/lockally/models/send_email_request.rb
 lib/lockally/models/send_email_request_attachments_inner.rb
 lib/lockally/models/send_message.rb
-lib/lockally/models/set_vacation_responder_request.rb
 lib/lockally/models/shared_member.rb
 lib/lockally/models/signup_request.rb
 lib/lockally/models/simulated_inbound.rb
@@ -521,8 +515,6 @@ lib/lockally/models/update_user_request.rb
 lib/lockally/models/update_webhook_request.rb
 lib/lockally/models/user.rb
 lib/lockally/models/user_event.rb
-lib/lockally/models/vacation_params.rb
-lib/lockally/models/vacation_responder.rb
 lib/lockally/models/webhook.rb
 lib/lockally/models/whoami.rb
 lib/lockally/models/whoami_key.rb
@@ -698,7 +690,6 @@ spec/models/list_shared_members200_response_spec.rb
 spec/models/list_suppressions200_response_spec.rb
 spec/models/list_templates200_response_spec.rb
 spec/models/list_users200_response_spec.rb
-spec/models/list_vacation_responders200_response_spec.rb
 spec/models/list_webhooks200_response_spec.rb
 spec/models/mailbox_grant_list_spec.rb
 spec/models/mailbox_grant_spec.rb
@@ -739,7 +730,6 @@ spec/models/send_email_batch_request_spec.rb
 spec/models/send_email_request_attachments_inner_spec.rb
 spec/models/send_email_request_spec.rb
 spec/models/send_message_spec.rb
-spec/models/set_vacation_responder_request_spec.rb
 spec/models/shared_member_spec.rb
 spec/models/signup_request_spec.rb
 spec/models/simulated_inbound_spec.rb
@@ -780,8 +770,6 @@ spec/models/update_user_request_spec.rb
 spec/models/update_webhook_request_spec.rb
 spec/models/user_event_spec.rb
 spec/models/user_spec.rb
-spec/models/vacation_params_spec.rb
-spec/models/vacation_responder_spec.rb
 spec/models/webhook_spec.rb
 spec/models/whoami_key_spec.rb
 spec/models/whoami_spec.rb
