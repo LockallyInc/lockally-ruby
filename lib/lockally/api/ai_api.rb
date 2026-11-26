@@ -86,7 +86,7 @@ module Lockally
     end
 
     # Buy prepaid AI units
-    # Body: {\"bundle\": \"100|500|2000\"}. One classification = one unit; bundles expire after 6 months. Admin session required. 503 until Paystack billing is configured.
+    # Body: {\"bundle\": \"300|1500|6000\"}. One classification = one unit; bundles expire after 3 months. Admin session required. 503 until Paystack billing is configured; 409 while prepaid AI units are not available on this server.
     # @param [Hash] opts the optional parameters
     # @return [CreateAiUnitsCheckout200Response]
     def create_ai_units_checkout(opts = {})
@@ -95,7 +95,7 @@ module Lockally
     end
 
     # Buy prepaid AI units
-    # Body: {\&quot;bundle\&quot;: \&quot;100|500|2000\&quot;}. One classification &#x3D; one unit; bundles expire after 6 months. Admin session required. 503 until Paystack billing is configured.
+    # Body: {\&quot;bundle\&quot;: \&quot;300|1500|6000\&quot;}. One classification &#x3D; one unit; bundles expire after 3 months. Admin session required. 503 until Paystack billing is configured; 409 while prepaid AI units are not available on this server.
     # @param [Hash] opts the optional parameters
     # @return [Array<(CreateAiUnitsCheckout200Response, Integer, Hash)>] CreateAiUnitsCheckout200Response data, response status code and response headers
     def create_ai_units_checkout_with_http_info(opts = {})

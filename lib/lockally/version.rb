@@ -11,5 +11,5 @@ Generator version: 7.23.0
 =end
 
 module Lockally
-  VERSION = '0.5.0'
+  VERSION = '0.6.0'
 end

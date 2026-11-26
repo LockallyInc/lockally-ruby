@@ -4,7 +4,8 @@
 
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
-| **from** | **String** |  |  |
+| **from** | **String** | Sender address, alone (&#x60;orders@acme.com&#x60;) or with a display name (&#x60;Acme Orders &lt;orders@acme.com&gt;&#x60;). Only the address is checked against your sender rules and used as the envelope sender. |  |
+| **from_name** | **String** | Display name recipients see next to &#x60;from&#x60;, e.g. &#x60;Acme Orders&#x60;. The same as giving it in &#x60;from&#x60;; if you do both, the names must match (400 &#x60;Conflicting from name&#x60;). Cannot contain &#x60;@&#x60; or control characters. Encoded and quoted for you, so accents, commas and quotes are safe. | [optional] |
 | **to** | **Array&lt;String&gt;** |  |  |
 | **cc** | **Array&lt;String&gt;** |  | [optional] |
 | **bcc** | **Array&lt;String&gt;** |  | [optional] |
@@ -31,6 +32,7 @@ require 'lockally'
 
 instance = Lockally::SendEmailRequest.new(
   from: null,
+  from_name: null,
   to: null,
   cc: null,
   bcc: null,

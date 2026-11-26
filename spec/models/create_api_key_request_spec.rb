@@ -36,7 +36,7 @@ describe Lockally::CreateApiKeyRequest do
   describe 'test attribute "scopes"' do
     it 'should work' do
       # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
-      # validator = Petstore::EnumTest::EnumAttributeValidator.new('Array<String>', ["tenant:read", "tenant:admin", "mailboxes:read", "mailboxes:write", "directory:sync", "inboxes:read", "inboxes:write", "send:read", "send:write", "templates:read", "templates:write", "suppressions:read", "suppressions:write", "webhooks:read", "webhooks:write", "domains:read", "domains:write", "migrations:read", "migrations:write"])
+      # validator = Petstore::EnumTest::EnumAttributeValidator.new('Array<String>', ["tenant:read", "tenant:admin", "mailboxes:read", "mailboxes:write", "directory:sync", "inboxes:read", "inboxes:draft", "inboxes:write", "send:read", "send:write", "templates:read", "templates:write", "suppressions:read", "suppressions:write", "webhooks:read", "webhooks:write", "domains:read", "domains:write", "migrations:read", "migrations:write"])
       # validator.allowable_values.each do |value|
       #   expect { instance.scopes = value }.not_to raise_error
       # end

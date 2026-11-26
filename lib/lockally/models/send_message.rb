@@ -15,7 +15,11 @@ require 'time'
 
 module Lockally
   class SendMessage < ApiModelBase
+    # Sender address, alone or as `Acme Orders <orders@acme.com>`.
     attr_accessor :from
+
+    # Display name shown next to `from`. Must match a name given in `from`. Cannot contain `@` or control characters.
+    attr_accessor :from_name
 
     attr_accessor :to
 
@@ -51,6 +55,7 @@ module Lockally
     def self.attribute_map
       {
         :'from' => :'from',
+        :'from_name' => :'from_name',
         :'to' => :'to',
         :'cc' => :'cc',
         :'bcc' => :'bcc',
@@ -82,6 +87,7 @@ module Lockally
     def self.openapi_types
       {
         :'from' => :'String',
+        :'from_name' => :'String',
         :'to' => :'Array<String>',
         :'cc' => :'Array<String>',
         :'bcc' => :'Array<String>',
@@ -125,6 +131,10 @@ module Lockally
         self.from = attributes[:'from']
       else
         self.from = nil
+      end
+
+      if attributes.key?(:'from_name')
+        self.from_name = attributes[:'from_name']
       end
 
       if attributes.key?(:'to')
@@ -207,6 +217,10 @@ module Lockally
         invalid_properties.push('invalid value for "from", from cannot be nil.')
       end
 
+      if !@from_name.nil? && @from_name.to_s.length > 200
+        invalid_properties.push('invalid value for "from_name", the character length must be smaller than or equal to 200.')
+      end
+
       if @to.nil?
         invalid_properties.push('invalid value for "to", to cannot be nil.')
       end
@@ -223,6 +237,7 @@ module Lockally
     def valid?
       warn '[DEPRECATED] the `valid?` method is obsolete'
       return false if @from.nil?
+      return false if !@from_name.nil? && @from_name.to_s.length > 200
       return false if @to.nil?
       return false if @to.length < 1
       true
@@ -236,6 +251,20 @@ module Lockally
       end
 
       @from = from
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] from_name Value to be assigned
+    def from_name=(from_name)
+      if from_name.nil?
+        fail ArgumentError, 'from_name cannot be nil'
+      end
+
+      if from_name.to_s.length > 200
+        fail ArgumentError, 'invalid value for "from_name", the character length must be smaller than or equal to 200.'
+      end
+
+      @from_name = from_name
     end
 
     # Custom attribute writer method with validation
@@ -258,6 +287,7 @@ module Lockally
       return true if self.equal?(o)
       self.class == o.class &&
           from == o.from &&
+          from_name == o.from_name &&
           to == o.to &&
           cc == o.cc &&
           bcc == o.bcc &&
@@ -283,7 +313,7 @@ module Lockally
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [from, to, cc, bcc, subject, text, html, headers, reply_to, reply_to_name, unsubscribe, template_id, variables, send_at, attachments].hash
+      [from, from_name, to, cc, bcc, subject, text, html, headers, reply_to, reply_to_name, unsubscribe, template_id, variables, send_at, attachments].hash
     end
 
     # Builds the object from hash
